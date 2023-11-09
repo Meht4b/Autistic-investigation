@@ -20,23 +20,55 @@ def handleClient(conn):
 
 
     try:
-        #checks username and password;closes if they do not match
-        username,password = pickle.loads(conn.recv(100))
 
-        if database.user_check(username,password):
-            conn.send(pickle.dump(True))
-            acc_id = database.acc_id(username,password)
+        loginSignup = pickle.loads(conn.recv(100))
 
-        else:
-            conn.send(pickle.dump(False))
-            conn.close()
-            return None
+        if loginSignup == 'L':
+       
+            #checks username and password;closes if they do not match
+            username,password = pickle.loads(conn.recv(100))
+
+            if database.user_check(username,password):
+                conn.send(pickle.dump(True))
+                acc_id = database.acc_id(username)
+
+            else:
+                conn.send(pickle.dump(False))
+                conn.close()
+                return None
+            
+        if loginSignup == 'S':
+            
+            #sign up
+            signupdetail = pickle.load(conn.recv(100))
+            database.sign_up(signupdetail)
+            acc_id = database.acc_id(signupdetail[0])
+           
+
         
         #request cycle 
+        while True:
+            req = pickle.load(conn.recv())
 
+            #request = ('transaction','to acc_id','amount')
+            if req[0]=='transact':
+                conn.send(pickle.dump(database.transact(acc_id,req[1],req[2])))
+            
+            #withdraw = (withdraw,amount)
+            if req[0]=='withdraw':
+                conn.send(pickle.dump(database.transact(acc_id,0,req[1])))
 
-    
-    except:
+            #deposit
+            if req[0]=='balance':
+                conn.send(pickle.dump(database.balance(acc_id)))
+
+            #history 
+            if req[0]=='history':
+                conn.send(pickle.dump(database.history(acc_id)))
+          
+                
+    except Exception as e:
+        print((addr,username),e)
         conn.send(pickle.dump(False))
         return None        
 
