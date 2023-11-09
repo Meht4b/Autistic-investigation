@@ -37,8 +37,12 @@ def handleClient(conn):
             req = pickle.load(conn.recv())
 
             #request = ('transaction','to acc_id','amount')
-            if req(0)=='transaction':
+            if req[0]=='transaction':
                 database.transaction(acc_id,req[1],req[2])
+            
+            #withdraw = (withdraw,amount)
+            if req[0]=='withdraw':
+                database.transact(acc_id,0,req[1])
 
 
     
