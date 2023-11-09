@@ -25,7 +25,7 @@ def handleClient(conn):
 
         if database.user_check(username,password):
             conn.send(pickle.dump(True))
-            acc_id = database.acc_id(username,password)
+            acc_id = database.acc_id(username)
 
         else:
             conn.send(pickle.dump(False))

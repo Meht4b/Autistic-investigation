@@ -3,8 +3,11 @@
 def init():
     pass
 
-def user_check():
+def user_check(username,password):
     pass
 
-def acc_id():
+def acc_id(username):
+    pass
+
+def transact(from_id,to_id,amount):
     pass
