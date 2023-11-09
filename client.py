@@ -18,6 +18,7 @@ try:
     username = pickle.load(f)[0]
     password = pickle.load(f)[1]
     server.send(pickle.dump(username,password,""))
+
 except FileNotFoundError:
     f = open('locahost','wb')
     print("You are creating a new account")
@@ -25,7 +26,7 @@ except FileNotFoundError:
     password    = input("Enter password:")
     name        = input("Enter your name:")
     number      = input("Enter your number:")
-    l_details   =(username,password,name,number)
+    l_details   = (username,password,name,number)
 
     pickle.dump(l_details,f)
     server.send(pickle.dump(username,password,"S"))
