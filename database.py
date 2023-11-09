@@ -11,3 +11,6 @@ def acc_id(username):
 
 def transact(from_id,to_id,amount):
     pass
+
+def sign_up():
+    pass
