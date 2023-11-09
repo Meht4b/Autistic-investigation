@@ -20,17 +20,30 @@ def handleClient(conn):
 
 
     try:
-        #checks username and password;closes if they do not match
-        username,password = pickle.loads(conn.recv(100))
 
-        if database.user_check(username,password):
-            conn.send(pickle.dump(True))
-            acc_id = database.acc_id(username)
+        loginSignup = pickle.loads(conn.recv(100))
 
-        else:
-            conn.send(pickle.dump(False))
-            conn.close()
-            return None
+        if loginSignup == 'L':
+       
+            #checks username and password;closes if they do not match
+            username,password = pickle.loads(conn.recv(100))
+
+            if database.user_check(username,password):
+                conn.send(pickle.dump(True))
+                acc_id = database.acc_id(username)
+
+            else:
+                conn.send(pickle.dump(False))
+                conn.close()
+                return None
+            
+        if loginSignup == 'S':
+            
+            signupdetail = pickle.loads(conn.recv(100))
+            database.sign_up(signupdetail)
+            acc_id = database.acc_id(signupdetail[0])
+           
+
         
         #request cycle 
         while True:
