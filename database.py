@@ -1,2 +1,0 @@
-#alskfjlaskjfla
-print('dlaksj')
