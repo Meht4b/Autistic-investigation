@@ -61,7 +61,8 @@ def handleClient(conn):
             #history 
             if req[0]=='history':
                 conn.send(pickle.dump(database.history(acc_id)))
-                
+
+             #dalkfjalsk   
 
                 
     except:
