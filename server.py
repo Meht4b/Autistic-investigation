@@ -33,6 +33,12 @@ def handleClient(conn):
             return None
         
         #request cycle 
+        while True:
+            req = pickle.load(conn.recv())
+
+            #request = ('transaction','to acc_id','amount')
+            if req(0)=='transaction':
+                database.transaction(acc_id,req[1],req[2])
 
 
     
