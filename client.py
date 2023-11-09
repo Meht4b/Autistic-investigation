@@ -17,13 +17,13 @@ try:
 
     #Check if user has an account, if not create account and save in binary file
     try:
-        f           = open('localdat','rb')
-        data        = pickle.load(f)                  #data=(username,password)
-        username    = pickle.load(f)[0]
-        password    = pickle.load(f)[1]
+        f = open('localdat','rb')
+        data = pickle.load(f)                  #data=(username,password)
+        username = pickle.load(f)[0]
+        password = pickle.load(f)[1]
 
         server.send(pickle.dump(username,password,"L"))
-        response    = pickle.load(server.recv(6940))
+        response = pickle.load(server.recv(6940))
 
 
         
@@ -32,11 +32,11 @@ try:
     except FileNotFoundError:
         f = open('locahost','wb')
         print("You are creating a new account")
-        username    = input("Enter username:")
-        password    = input("Enter password:")
-        name        = input("Enter your name:")
-        number      = input("Enter your number:")
-        l_details   = (username,password,name,number)
+        username = input("Enter username:")
+        password = input("Enter password:")
+        name = input("Enter your name:")
+        number = input("Enter your number:")
+        l_details = (username,password,name,number)
         server.recv()
 
         pickle.dump(l_details,f)
