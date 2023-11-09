@@ -39,6 +39,7 @@ def handleClient(conn):
             
         if loginSignup == 'S':
             
+            #sign up
             signupdetail = pickle.loads(conn.recv(100))
             database.sign_up(signupdetail)
             acc_id = database.acc_id(signupdetail[0])
@@ -56,6 +57,8 @@ def handleClient(conn):
             #withdraw = (withdraw,amount)
             if req[0]=='withdraw':
                 database.transact(acc_id,0,req[1])
+
+            
 
 
     
