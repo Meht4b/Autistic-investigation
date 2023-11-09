@@ -3,10 +3,14 @@ import mysql.connector
 class db:
     
 
-    def __int__(self,host, user, password, database_name, ):
+    def __init__(self,host, user, password, database_name, ):
+        self.host=host
+        self.user=user
+        self.password=password
+        self.database_name=database_name
         try:
             # connection making
-            connection = mysql.connector.connect(
+            self.connection = mysql.connector.connect(
                 host=host,
                 user=user,
                 password=password
@@ -16,9 +20,9 @@ class db:
                 
 
                 # Create a database
-                cursor = connection.cursor()
-                cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
-                cursor.execute("""
+                self.cursor = connection.cursor()
+                self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
+                self.cursor.execute("""
                     CREATE TABLE IF NOT EXISTS personal_details(username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10),primary key (acc_id),acc_id int auto_increment
                     )
                     """,
@@ -39,19 +43,23 @@ class db:
                     )
                 
             
-                cursor.execute('insert into personal_details values("admin","admin","admin","0")')
-                cursor.execute('insert into accounts values(0,1000000000000000)')
-                return cursor
+                self.cursor.execute('insert into personal_details values("admin","admin","admin","0")')
+                self.cursor.execute('insert into accounts values(0,1000000000000000)')
+                return self.cursor
 
                 
             
         except Exception as vardhan:
             print('vardhan')
 
-    def user_check(username,password):
+    def user_check(username,password,cursor):
+        try:
+            cursor.execute(f'SELECT * FROM personal_details WHERE username ={username} AND password = {password}')
+            return True
+        except Exception:
+            return False
         
-        pass
-        #return True or False
+        #return True if correct or False
 
     def acc_id(username):
         pass
