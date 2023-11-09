@@ -18,3 +18,7 @@ def transact(from_id,to_id,amount):
 def sign_up():
     pass
     #no return
+
+def history():
+    pass
+    #return tuple(tuple)
