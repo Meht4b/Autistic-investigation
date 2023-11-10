@@ -95,7 +95,10 @@ def CheckNameOrNumber(value:int or str):
         
     if type(value)==int:
         return False
-    
+
+def logout():
+    server.send(pickle.dump("disconnect",()))
+    return pickle.load(server.recv)
 
 
 
