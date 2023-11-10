@@ -76,7 +76,7 @@ def loan(amount:float):
 
 def balance():
     #sends balance request
-    server.send(pickle.dump(("balance",())))
+    server.send(pickle.dump(("balance",)))
     return pickle.load(server.recv)  # returns whatever the server sends
 
 def history():
