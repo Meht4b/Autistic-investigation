@@ -161,5 +161,3 @@ while True:
     except Exception as E:
         print(E)
 
-###notes: Define logout function, check loop for continuity, poop
-#random 8 am commit
