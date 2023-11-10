@@ -70,7 +70,7 @@ def handleClient(conn):
             if req[0]=='name':
                 conn.send(pickle.dump(database.name(req[1])))
             
-            if req[0]=='acc_d':
+            if req[0]=='acc_id':
                 conn.send(pickle.dump(database.acc_id(req[1])))
             
             if req[0]=='loan':
