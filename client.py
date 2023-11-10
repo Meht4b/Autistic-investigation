@@ -39,18 +39,18 @@ def login():
         #attempts to read local file and login
 
     except FileNotFoundError:
-        f = open('locahost','wb')
-        print("You are creating a new account")
-        username    = input("Enter username:")
-        password    = input("Enter password:")
-        name        = input("Enter your name:")
-        number      = input("Enter your number:")
-        l_details   = (username,password,name,number)
+        with f as open('locahost','wb'):
+            print("You are creating a new account")
+            username    = input("Enter username:")
+            password    = input("Enter password:")
+            name        = input("Enter your name:")
+            number      = input("Enter your number:")
+            l_details   = (username,password,name,number)
 
-        pickle.dump(l_details,f)
-        server.send(pickle.dump(username,password,"S"))
-        server.send(pickle.dump(l_details))
-        response    = pickle.load(server.recv(6940))
+            pickle.dump(l_details,f)
+            server.send(pickle.dump((username,password,"S")))
+            server.send(pickle.dump(l_details))
+            response    = pickle.load(server.recv(6940))
 
 
 
@@ -130,8 +130,8 @@ while True:
 
                     if not CheckNameOrNumber(value):
                         
-                        surity = print(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
-                        if surity in [1,"Yes","yes","YES","Yes","Y","y"]:
+                        surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
+                        if surity.lower in ["yes","y"]
                             amt=int(input(f"Enter amount to be transferred to {lookup(value)}:"))
                             print(transact(value,amt))
 
