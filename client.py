@@ -23,18 +23,18 @@ def login():
     try:
 
         #attempts to read local file and login
-        f = open('localdat','rb')
+        with open('locahost','wb') as f:
 
-        username = pickle.load(f)[0]
-        password = pickle.load(f)[1]
+            username = pickle.load(f)[0]
+            password = pickle.load(f)[1]
 
-        server.send(pickle.dump(username,password,"L"))
-        response = pickle.load(server.recv(6940))
+            server.send(pickle.dump(username,password,"L"))
+            response = pickle.load(server.recv(6940))
 
-        if response[0] == True:
-            print(response[1])
-        elif response[0] == False:
-            print(response[1])
+            if response[0] == True:
+                print(response[1])
+            elif response[0] == False:
+                print(response[1])
               
     except FileNotFoundError:
         
