@@ -88,13 +88,6 @@ def lookup(value:int or str):
     elif CheckNameOrNumber(value):
         server.send(pickle.dump(("acc_id",value)))
         return pickle.load(server.recv)
-    
-def CheckNameOrNumber(value:int or str):
-    if type(value) == str:   
-        return True
-        
-    if type(value) == int:
-        return False
 
 def logout():
     server.send(pickle.dump("disconnect",()))
@@ -128,7 +121,7 @@ while True:
 
                     
 
-                    if not CheckNameOrNumber(value):
+                    if isinstance(value,int):
                         
                         surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
                         if surity.lower in ["yes","y"]:
@@ -144,7 +137,7 @@ while True:
 
                         
                     
-                    elif CheckNameOrNumber(value):
+                    else:
 
                         surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
                         if surity.lower in ["yes","y"]:
