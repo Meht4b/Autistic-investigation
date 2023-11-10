@@ -21,17 +21,17 @@ def login():
 
     #Check if user has an account, if not create account and save in binary file
     try:
-        f           = open('localdat','rb')
+        f = open('localdat','rb')
 
-        username    = pickle.load(f)[0]
-        password    = pickle.load(f)[1]
+        username = pickle.load(f)[0]
+        password = pickle.load(f)[1]
 
         server.send(pickle.dump(username,password,"L"))
-        response    = pickle.load(server.recv(6940))
+        response = pickle.load(server.recv(6940))
 
-        if response[0]==True:
+        if response[0] == True:
             print(response[1])
-        elif response[0]==False:
+        elif response[0] == False:
             print(response[1])
 
 
@@ -39,7 +39,7 @@ def login():
         #attempts to read local file and login
 
     except FileNotFoundError:
-        with f as open('locahost','wb'):
+        with open('locahost','wb') as f:
             print("You are creating a new account")
             username    = input("Enter username:")
             password    = input("Enter password:")
@@ -50,7 +50,7 @@ def login():
             pickle.dump(l_details,f)
             server.send(pickle.dump((username,password,"S")))
             server.send(pickle.dump(l_details))
-            response    = pickle.load(server.recv(6940))
+            response = pickle.load(server.recv(6940))
 
 
 
@@ -90,10 +90,10 @@ def lookup(value:int or str):
         return pickle.load(server.recv)
     
 def CheckNameOrNumber(value:int or str):
-    if type(value)==str:   
+    if type(value) == str:   
         return True
         
-    if type(value)==int:
+    if type(value) == int:
         return False
 
 def logout():
@@ -114,16 +114,16 @@ while True:
             6.Logout""")
             ch=int(input("Select Action"))
 
-            if ch==1:
+            if ch == 1:
                 print(balance())
-            elif ch==2:
+            elif ch == 2:
                 amt=float(input("Enter amount to be deposited"))
                 print(deposit(amt))
-            elif ch==3:
+            elif ch == 3:
                 print(withdraw())
-            elif ch==4:
+            elif ch == 4:
                 while True:
-                    value=print("Enter reciever's Account ID or username:")
+                    value = print("Enter reciever's Account ID or username:")
                     
 
                     
@@ -131,12 +131,12 @@ while True:
                     if not CheckNameOrNumber(value):
                         
                         surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
-                        if surity.lower in ["yes","y"]
-                            amt=int(input(f"Enter amount to be transferred to {lookup(value)}:"))
+                        if surity.lower in ["yes","y"]:
+                            amt = int(input(f"Enter amount to be transferred to {lookup(value)}:"))
                             print(transact(value,amt))
 
                         else:
-                            tryagn=input("Try again?(Y/N):")
+                            tryagn = input("Try again?(Y/N):")
                             if tryagn =="Y":
                                 pass
                             else:
@@ -147,19 +147,19 @@ while True:
                     elif CheckNameOrNumber(value):
 
                         surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
-                        if surity in [1,"Yes","yes","YES","Yes","Y","y"]:
-                            amt=int(input(f"Enter amount to be transferred to {value}:"))
+                        if surity.lower in ["yes","y"]:
+                            amt = int(input(f"Enter amount to be transferred to {value}:"))
                             print(transact(lookup(value),amt))
 
                         else:
                             tryagn=input("Try again?(Y/N):")
-                            if tryagn =="Y":
+                            if tryagn == "Y":
                                 pass
                             else:
                                 break
-            elif ch==5:
+            elif ch == 5:
                 print(history())        
-            elif ch==6:
+            elif ch == 6:
                 print(logout())                       
 
             
