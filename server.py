@@ -78,7 +78,9 @@ def handleClient(conn):
 
             #note for metab add name(request is "name" and ill send account id nd ull return username)
             #|||ly just do same for if i send "acc_id" send acc id of recieved username
-          
+
+            if req[0]=='disconnect':
+                conn.close()
                 
     except Exception as e:
         print((addr,username),e)
