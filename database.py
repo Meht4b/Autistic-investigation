@@ -65,6 +65,10 @@ class db:
         pass
         #return int 
 
+    def name(acc_id:int):
+        pass
+        #return 
+        
     def transact(from_id,to_id,amount):
         pass
         #no return
