@@ -65,6 +65,9 @@ def handleClient(conn):
             #history 
             if req[0]=='history':
                 conn.send(pickle.dump(database.history(acc_id)))
+
+            #note for metab add name(request is "name" and ill send account id nd ull return username)
+            #|||ly just do same for if i send "acc_id" send acc id of recieved username
           
                 
     except Exception as e:
