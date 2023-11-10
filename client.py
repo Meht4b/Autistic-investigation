@@ -8,6 +8,8 @@ host ='localhost'
 port = 8080
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
+#function defenitions; most functions returns whatever the server sends 
+
 def connect(host,port):
 
     #Connect to server and returns server object
@@ -19,27 +21,22 @@ def connect(host,port):
 
 def login():
 
-    #Check if user has an account, if not create account and save in binary file
-    try:
-
-        #attempts to read local file and login
-        with open('locahost','wb') as f:
-
-            username = pickle.loads(f)[0]
-            password = pickle.loads(f)[1]
-
-            server.send(pickle.dumps(username,password,"L"))
-            response = pickle.loads(server.recv(6940))
-
-            if response[0] == True:
-                print(response[1])
-            elif response[0] == False:
-                print(response[1])
-              
-    except FileNotFoundError:
+    #Asks user if they want to Login/Signup
+    #Returns Error/Confirmation message send from server
+    YesAccount=input("Login or Signup(L/S):")
+    
+    if YesAccount.lower() == "l":
+        #Login: Sends username and password
+        username = input("Enter username")
+        password = input("Enter password")
+        server.send(pickle.dumps(username,password,"L"))
+        return pickle.loads(server.recv(6940))[1]
         
-        #Creates account and sends request
-        with open('locahost','wb') as f:
+
+              
+    else:
+        #Signup: Creates account and sends request
+
             print("You are creating a new account")
             username    = input("Enter username:")
             password    = input("Enter password:")
@@ -47,13 +44,10 @@ def login():
             number      = input("Enter your number:")
             l_details   = (username,password,name,number)
 
-            pickle.dump(l_details,f)
             server.send(pickle.dumps((username,password,"S")))
             server.send(pickle.dumps(l_details))
-            response = pickle.loads(server.recv(6940))
+            return pickle.loads(server.recv(6940))
 
-
-#function defenitions; most functions returns whatever the server sends 
 def transact(reciever:int,amount:float):
     #Sends Transact request with Reciever's Acc_ID and amount to be transferred
     server.send(pickle.dumps(("transact",(reciever,amount))))
@@ -99,13 +93,17 @@ def lookup(value:int or str):
 
 def logout():
     #sends disconnect request
-    server.send(pickle.dumps("disconnect",()))
+    server.send(pickle.dumps(("disconnect",)))
     return pickle.loads(server.recv)  # returns whatever the server sends
 
 #Main Loop
 while True:        
     try:
         while True:
+
+            connect(host,port)
+            login()
+
             print("""Bank Window
             1.Show Balance
             2.Deposit
@@ -113,6 +111,7 @@ while True:
             4.Send money
             5.Show Transaction History
             6.Logout""")
+
             ch=int(input("Select Action:"))
 
             #Checks and calls selected functions along with proper arguments
@@ -149,7 +148,8 @@ while True:
                         print(transact(lookup(value),amt))
 
             elif ch == 5:
-                print(history())        
+                print(history())     
+   
             elif ch == 6:
                 print(logout())                       
 
