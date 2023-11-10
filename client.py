@@ -107,7 +107,8 @@ while True:
             2.Deposit
             3.Withdraw
             4.Send money
-            4.Show Transaction History""")
+            5.Show Transaction History
+            6.Logout""")
             ch=int(input("Select Action"))
 
             if ch==1:
@@ -153,8 +154,10 @@ while True:
                                 pass
                             else:
                                 break
-                        
-                        
+            elif ch==5:
+                print(history())        
+            elif ch==6:
+                print(logout())                       
 
             
 
@@ -162,3 +165,4 @@ while True:
     except Exception as E:
         print(E)
 
+###notes: Define logout function, check loop for continuity, poop
