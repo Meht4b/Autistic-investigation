@@ -10,7 +10,7 @@ server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 def connect(host,port):
 
-    #Connect to server
+    #Connect to server and returns server object
     server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     server.connect((host,port))
     socket.setdefaulttimeout(18.5)
@@ -21,6 +21,8 @@ def login():
 
     #Check if user has an account, if not create account and save in binary file
     try:
+
+        #attempts to read local file and login
         f = open('localdat','rb')
 
         username = pickle.load(f)[0]
@@ -33,12 +35,10 @@ def login():
             print(response[1])
         elif response[0] == False:
             print(response[1])
-
-
-        
-        #attempts to read local file and login
-
+              
     except FileNotFoundError:
+        
+        #Creates account and sends request
         with open('locahost','wb') as f:
             print("You are creating a new account")
             username    = input("Enter username:")
@@ -54,29 +54,33 @@ def login():
 
 
 
-        #Creates account and sends request
-
 def transact(reciever:int,amount:float):
+    #Sends Transact request with Reciever's Acc_ID and amount to be transferred
     server.send(pickle.dump(("transact",(reciever,amount))))
     return pickle.load(server.recv)
 
 def withdraw(amount:float):
+    #sends withdraw request with amount to be withdrawn
     server.send(pickle.dump(("withdraw",amount)))
     return pickle.load(server.recv)
 
 def deposit(amount:float):
+    #sends deposit request with amount to be deposited
     server.send(pickle.dump(("deposit",amount)))
     return pickle.load(server.recv)
 
 def loan(amount:float):
+    #sends loan request with amount of loan
     server.send(pickle.dump(("loan",amount)))
     return pickle.load(server.recv)
 
 def balance():
+    #sends balance request
     server.send(pickle.dump(("balance",())))
     return pickle.load(server.recv)
 
 def history():
+    #sends history request
     server.send(pickle.dump((history,())))
     return pickle.load(server.recv)
 
@@ -92,7 +96,6 @@ def lookup(value:int or str):
 def logout():
     server.send(pickle.dump("disconnect",()))
     return pickle.load(server.recv)
-
 
 
 while True:        
