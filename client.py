@@ -25,11 +25,11 @@ def login():
         #attempts to read local file and login
         with open('locahost','wb') as f:
 
-            username = pickle.load(f)[0]
-            password = pickle.load(f)[1]
+            username = pickle.loads(f)[0]
+            password = pickle.loads(f)[1]
 
-            server.send(pickle.dump(username,password,"L"))
-            response = pickle.load(server.recv(6940))
+            server.send(pickle.dumps(username,password,"L"))
+            response = pickle.loads(server.recv(6940))
 
             if response[0] == True:
                 print(response[1])
@@ -48,59 +48,59 @@ def login():
             l_details   = (username,password,name,number)
 
             pickle.dump(l_details,f)
-            server.send(pickle.dump((username,password,"S")))
-            server.send(pickle.dump(l_details))
-            response = pickle.load(server.recv(6940))
+            server.send(pickle.dumps((username,password,"S")))
+            server.send(pickle.dumps(l_details))
+            response = pickle.loads(server.recv(6940))
 
 
 #function defenitions; most functions returns whatever the server sends 
 def transact(reciever:int,amount:float):
     #Sends Transact request with Reciever's Acc_ID and amount to be transferred
-    server.send(pickle.dump(("transact",(reciever,amount))))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps(("transact",(reciever,amount))))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 def withdraw(amount:float):
     #sends withdraw request with amount to be withdrawn
-    server.send(pickle.dump(("withdraw",amount)))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps(("withdraw",amount)))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 def deposit(amount:float):
     #sends deposit request with amount to be deposited
-    server.send(pickle.dump(("deposit",amount)))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps(("deposit",amount)))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 def loan(amount:float):
     #sends loan request with amount of loan
-    server.send(pickle.dump(("loan",amount)))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps(("loan",amount)))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 def balance():
     #sends balance request
-    server.send(pickle.dump(("balance",)))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps(("balance",)))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 def history():
     #sends history request
-    server.send(pickle.dump((history,())))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps((history,())))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 def lookup(value:int or str):
     #returns corresponding name/acc_id of input value
 
     #Checks if value is an integer(acc_id); returns corresponding username
     if isinstance(value,int):
-        server.send(pickle.dump(("name",value)))
-        return pickle.load(server.recv)
+        server.send(pickle.dumps(("name",value)))
+        return pickle.loads(server.recv)
     
     #checks if value is a string(username); returns corresponding acc_id
     elif isinstance(value,str):
-        server.send(pickle.dump(("acc_id",value)))
-        return pickle.load(server.recv)
+        server.send(pickle.dumps(("acc_id",value)))
+        return pickle.loads(server.recv)
 
 def logout():
     #sends disconnect request
-    server.send(pickle.dump("disconnect",()))
-    return pickle.load(server.recv)  # returns whatever the server sends
+    server.send(pickle.dumps("disconnect",()))
+    return pickle.loads(server.recv)  # returns whatever the server sends
 
 #Main Loop
 while True:        
@@ -113,14 +113,14 @@ while True:
             4.Send money
             5.Show Transaction History
             6.Logout""")
-            ch=int(input("Select Action"))
+            ch=int(input("Select Action:"))
 
             #Checks and calls selected functions along with proper arguments
             if ch == 1:
                 print(balance())
 
             elif ch == 2:
-                amt=float(input("Enter amount to be deposited"))
+                amt=float(input("Enter amount to be deposited:"))
                 print(deposit(amt))
             
             elif ch == 3:
