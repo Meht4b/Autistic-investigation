@@ -81,11 +81,11 @@ def history():
     return pickle.load(server.recv)
 
 def lookup(value:int or str):
-    if not CheckNameOrNumber(value):
+    if isinstance(value,int):
         server.send(pickle.dump(("name",value)))
         return pickle.load(server.recv)
     
-    elif CheckNameOrNumber(value):
+    elif isinstance(value,str):
         server.send(pickle.dump(("acc_id",value)))
         return pickle.load(server.recv)
 
