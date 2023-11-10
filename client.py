@@ -6,6 +6,7 @@ password=None
 
 host ='localhost'
 port = 8080
+server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 def connect(host,port):
 
@@ -55,15 +56,109 @@ def login():
 
         #Creates account and sends request
 
-def transact(reciever,amount):
-    server.send(pickle.dump("transact",(to,amount)))
+def transact(reciever:int,amount:float):
+    server.send(pickle.dump(("transact",(reciever,amount))))
+    return pickle.load(server.recv)
 
-def withdraw()
+def withdraw(amount:float):
+    server.send(pickle.dump(("withdraw",amount)))
+    return pickle.load(server.recv)
+
+def deposit(amount:float):
+    server.send(pickle.dump(("deposit",amount)))
+    return pickle.load(server.recv)
+
+def loan(amount:float):
+    server.send(pickle.dump(("loan",amount)))
+    return pickle.load(server.recv)
+
+def balance():
+    server.send(pickle.dump(("balance",())))
+    return pickle.load(server.recv)
+
+def history():
+    server.send(pickle.dump((history,())))
+    return pickle.load(server.recv)
+
+def lookup(value:int or str):
+    if not CheckNameOrNumber(value):
+        server.send(pickle.dump(("name",value)))
+        return pickle.load(server.recv)
+    
+    elif CheckNameOrNumber(value):
+        server.send(pickle.dump(("acc_id",value)))
+        return pickle.load(server.recv)
+    
+def CheckNameOrNumber(value:int or str):
+    if type(value)==str:   
+        return True
         
+    if type(value)==int:
+        return False
+    
 
 
 
-(withdraw,(amount))
-(deposit,(amount))
-(history,())
-(loan,(amount))
+while True:        
+    try:
+        while True:
+            print("""Bank Window
+            1.Show Balance
+            2.Deposit
+            3.Withdraw
+            4.Send money
+            4.Show Transaction History""")
+            ch=int(input("Select Action"))
+
+            if ch==1:
+                print(balance())
+            elif ch==2:
+                amt=float(input("Enter amount to be deposited"))
+                print(deposit(amt))
+            elif ch==3:
+                print(withdraw())
+            elif ch==4:
+                while True:
+                    value=print("Enter reciever's Account ID or username:")
+                    
+
+                    
+
+                    if not CheckNameOrNumber(value):
+                        
+                        surity = print(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
+                        if surity in [1,"Yes","yes","YES","Yes","Y","y"]:
+                            amt=int(input(f"Enter amount to be transferred to {lookup(value)}:"))
+                            print(transact(value,amt))
+
+                        else:
+                            tryagn=input("Try again?(Y/N):")
+                            if tryagn =="Y":
+                                pass
+                            else:
+                                break
+
+                        
+                    
+                    elif CheckNameOrNumber(value):
+
+                        surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
+                        if surity in [1,"Yes","yes","YES","Yes","Y","y"]:
+                            amt=int(input(f"Enter amount to be transferred to {value}:"))
+                            print(transact(lookup(value),amt))
+
+                        else:
+                            tryagn=input("Try again?(Y/N):")
+                            if tryagn =="Y":
+                                pass
+                            else:
+                                break
+                        
+                        
+
+            
+
+
+    except Exception as E:
+        print(E)
+
