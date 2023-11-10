@@ -1,4 +1,4 @@
-import database 
+import database as data_base
 import socket 
 import pickle
 import threading 
@@ -14,6 +14,7 @@ server.bind((host,port))
 
 server.listen()
 
+database = data_base.db('localhost',)
 
 
 def handleClient(conn):
@@ -65,6 +66,15 @@ def handleClient(conn):
             #history 
             if req[0]=='history':
                 conn.send(pickle.dump(database.history(acc_id)))
+
+            if req[0]=='name':
+                conn.send(pickle.dump(database.name(req[1])))
+            
+            if req[0]=='acc_d':
+                conn.send(pickle.dump(database.acc_id(req[1])))
+            
+            if req[0]=='loan':
+                conn.send(pickle.dump(database.loan(database,acc_id,req[1])))
 
             #note for metab add name(request is "name" and ill send account id nd ull return username)
             #|||ly just do same for if i send "acc_id" send acc id of recieved username
