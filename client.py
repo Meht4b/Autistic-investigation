@@ -30,7 +30,7 @@ def login():
         username = input("Enter username")
         password = input("Enter password")
         server.send(pickle.dumps(username,password,"L"))
-        return pickle.loads(server.recv(6940))[1]
+        return pickle.loads(server.recv(4096))[1]
         
 
               
@@ -51,32 +51,32 @@ def login():
 def transact(reciever:int,amount:float):
     #Sends Transact request with Reciever's Acc_ID and amount to be transferred
     server.send(pickle.dumps(("transact",(reciever,amount))))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def withdraw(amount:float):
     #sends withdraw request with amount to be withdrawn
     server.send(pickle.dumps(("withdraw",amount)))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def deposit(amount:float):
     #sends deposit request with amount to be deposited
     server.send(pickle.dumps(("deposit",amount)))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def loan(amount:float):
     #sends loan request with amount of loan
     server.send(pickle.dumps(("loan",amount)))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def balance():
     #sends balance request
     server.send(pickle.dumps(("balance",)))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def history():
     #sends history request
     server.send(pickle.dumps((history,())))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(8192))  # returns whatever the server sends
 
 def lookup(value:int or str):
     #returns corresponding name/acc_id of input value
@@ -84,17 +84,17 @@ def lookup(value:int or str):
     #Checks if value is an integer(acc_id); returns corresponding username
     if isinstance(value,int):
         server.send(pickle.dumps(("name",value)))
-        return pickle.loads(server.recv)
+        return pickle.loads(server.recv(4096))
     
     #checks if value is a string(username); returns corresponding acc_id
     elif isinstance(value,str):
         server.send(pickle.dumps(("acc_id",value)))
-        return pickle.loads(server.recv)
+        return pickle.loads(server.recv(4096))
 
 def logout():
     #sends disconnect request
     server.send(pickle.dumps(("disconnect",)))
-    return pickle.loads(server.recv)  # returns whatever the server sends
+    return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 #Main Loop
 while True:        
