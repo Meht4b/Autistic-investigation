@@ -81,6 +81,7 @@ def handleClient(conn):
 
             if req[0]=='disconnect':
                 conn.close()
+                break
                 
     except Exception as e:
         print((addr,username),e)
