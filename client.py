@@ -107,20 +107,21 @@ while True:
             6.Logout""")
             ch=int(input("Select Action"))
 
+
             if ch == 1:
                 print(balance())
+
             elif ch == 2:
                 amt=float(input("Enter amount to be deposited"))
                 print(deposit(amt))
+            
             elif ch == 3:
                 print(withdraw())
+            
             elif ch == 4:
                 while True:
                     value = print("Enter reciever's Account ID or username:")
                     
-
-                    
-
                     if isinstance(value,int):
                         
                         surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
@@ -128,15 +129,6 @@ while True:
                             amt = int(input(f"Enter amount to be transferred to {lookup(value)}:"))
                             print(transact(value,amt))
 
-                        else:
-                            tryagn = input("Try again?(Y/N):")
-                            if tryagn =="Y":
-                                pass
-                            else:
-                                break
-
-                        
-                    
                     else:
 
                         surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
@@ -144,12 +136,6 @@ while True:
                             amt = int(input(f"Enter amount to be transferred to {value}:"))
                             print(transact(lookup(value),amt))
 
-                        else:
-                            tryagn=input("Try again?(Y/N):")
-                            if tryagn == "Y":
-                                pass
-                            else:
-                                break
             elif ch == 5:
                 print(history())        
             elif ch == 6:
