@@ -25,21 +25,20 @@ class db:
                 self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
                 self.connection.database = database_name
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS personal_details(username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10),acc_id int auto_increment,primary key (acc_id)
+                    CREATE TABLE IF NOT EXISTS personal_details(username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10),acc_id int
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS accounts(acc_id int primary key,balance int ,foreign key (acc_id) references personal_details(acc_id)
+                    CREATE TABLE IF NOT EXISTS accounts(acc_id int primary key,balance int
                     
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS loan(L_id auto_increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) references personal_details(acc_id),primary key (L_id)
-                    
+                    CREATE TABLE IF NOT EXISTS loan(L_id int,bank_account int,acc_id int,amount int
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS history(transaction_id int primary key,date varchar(20),from int ,to int ,amount int, foreign key (from) references accounts(acc_id), foreign key (to) references accounts(acc_id)
+                    CREATE TABLE IF NOT EXISTS history(transaction_id int primary key,date varchar(20),from int,to int,amount int
                     )
                     """)
                 
