@@ -1,5 +1,6 @@
 import socket
 import pickle
+import os
 
 username=None
 password=None
@@ -13,11 +14,11 @@ server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 #function defenitions; most functions returns whatever the server sends 
 
 def connect(def_host,def_port):
-
+    os.system('cls')
     #Connect to server and returns server object
     print("Leave blank for default")
     host = input("Enter host IP Address:")
-    port = input("Enter host port:")
+    port = int(input("Enter host port:"))
 
     if host == "":
         host=def_host
@@ -27,12 +28,14 @@ def connect(def_host,def_port):
     server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     server.connect((host,port))
     socket.setdefaulttimeout(18.5)
+    
     return server
 
 def login():
 
     #Asks user if they want to Login/Signup
     #Returns Error/Confirmation message send from server
+    os.system('cls')
     YesAccount=input("Login or Signup(L/S):")
     
     if YesAccount.lower() == "l":
@@ -56,35 +59,43 @@ def login():
             number      = input("Enter your number:")
             l_details   = (username,password,name,number)
             server.send(pickle.dumps(l_details))
+            os.system('cls')
+
             return pickle.loads(server.recv(6940))
             #note to vardhan - implement existing user check case
 
 def transact(reciever:int,amount:float):
+    os.system('cls')
     #Sends Transact request with Reciever's Acc_ID and amount to be transferred
     server.send(pickle.dumps(("transact",(reciever,amount))))
     return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def withdraw(amount:float):
+    os.system('cls')
     #sends withdraw request with amount to be withdrawn
     server.send(pickle.dumps(("withdraw",amount)))
     return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def deposit(amount:float):
+    os.system('cls')
     #sends deposit request with amount to be deposited
     server.send(pickle.dumps(("deposit",amount)))
     return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def loan(amount:float):
+    os.system('cls')
     #sends loan request with amount of loan
     server.send(pickle.dumps(("loan",amount)))
     return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def balance():
+    os.system('cls')
     #sends balance request
     server.send(pickle.dumps(("balance",)))
     return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
 def history():
+    os.system('cls')
     #sends history request
     server.send(pickle.dumps((history,())))
     return pickle.loads(server.recv(8192))  # returns whatever the server sends
@@ -103,9 +114,10 @@ def lookup(value:int or str):
         return pickle.loads(server.recv(4096))
 
 def logout():
+    os.system('cls')
     #sends disconnect request
     server.send(pickle.dumps(("disconnect",)))
-    return pickle.loads(server.recv(4096))  # returns whatever the server sends
+    return "Logged out."
 
 #Main Loop
 while True:        
@@ -169,4 +181,5 @@ while True:
     #If any error occurs, print Error and continue the loop
     except Exception as E:
         print(E)
+        inp=input("Press Enter to continue.")
 
