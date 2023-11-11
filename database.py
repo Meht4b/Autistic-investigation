@@ -29,17 +29,17 @@ class db:
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS accounts(acc_id int primary key,balance int ,foreign key (acc_id) refrences personal_details(acc_id)
+                    CREATE TABLE IF NOT EXISTS accounts(acc_id int primary key,balance int ,foreign key (acc_id) references personal_details(acc_id)
                     
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS loan(L_id auto_increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) refrences personal_details(acc_id),primary key (L_id)
+                    CREATE TABLE IF NOT EXISTS loan(L_id auto_increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) references personal_details(acc_id),primary key (L_id)
                     
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS history(transaction_id int primary key,date varchar(20),from int ,to int ,amount int, foreign key (from) refrences accounts(acc_id), foreign key (to) refrences accounts(acc_id)
+                    CREATE TABLE IF NOT EXISTS history(transaction_id int primary key,date varchar(20),from int ,to int ,amount int, foreign key (from) references accounts(acc_id), foreign key (to) references accounts(acc_id)
                     )
                     """)
                 
