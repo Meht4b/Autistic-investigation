@@ -34,7 +34,7 @@ class db:
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS loan(L_id auto increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) refrences personal_details(acc_id),primary key (L_id)
+                    CREATE TABLE IF NOT EXISTS loan(L_id auto_increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) refrences personal_details(acc_id),primary key (L_id)
                     
                     )
                     """)
