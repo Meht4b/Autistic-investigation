@@ -13,8 +13,8 @@ server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
 
 server.listen()
-
-database = data_base.db('localhost',)
+#(self,host, user, password, database_name, )
+database = data_base.db('localhost','root','chungus','doraemon')
 
 
 def handleClient(conn):
