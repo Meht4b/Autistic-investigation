@@ -25,7 +25,7 @@ class db:
                 self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
                 self.connection.database = database_name
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS personal_details(username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10),primary key (acc_id),acc_id int auto_increment
+                    CREATE TABLE IF NOT EXISTS personal_details(username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10),acc_id int auto_increment,primary key (acc_id)
                     )
                     """)
                 self.cursor.execute("""
@@ -34,7 +34,7 @@ class db:
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS loan(bank_account int primary key,acc_id int,amount int,foreign key (acc_id) refrences personal_details(acc_id)
+                    CREATE TABLE IF NOT EXISTS loan(L_id auto increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) refrences personal_details(acc_id),primary key (L_id)
                     
                     )
                     """)
@@ -49,8 +49,8 @@ class db:
 
                 
             
-        except Exception as vardhan:
-            print('vardhan')
+        except Exception as e:
+            print(e)
 
     def user_check(username,password,cursor):
         try:
@@ -61,19 +61,19 @@ class db:
         
         #return True if correct or False
 
-    def acc_id(username):
+    def acc_id(self,username,password,name,phoneno):
         pass
         #return int 
 
-    def name(acc_id:int):
+    def name(self,acc_id:int):
         pass
         #return tuple
         
-    def transact(from_id,to_id,amount):
+    def transact(self,from_id,to_id,amount):
         pass
         #no tuple
 
-    def sign_up():
+    def sign_up(self,username,passwd,):
         pass
         #no tuple
 
@@ -82,6 +82,12 @@ class db:
         #return tuple(tuple)
 
     def loan(self,acc_id,amount):
-        #create new account for loan bank account thing
-        self.transact(0,acc_id,amount)
-        #create new record 
+
+        self.cursor.execute(f'insert into loan (acc_id,amount) values ({acc_id},{amount})')
+        
+        l_id = None #code to get L_id of last added record
+        self.sign_up(f'LOAN_{l_id}','admin')
+        
+        l_acc = None #code to get bank account of loan
+        self.transact(0,l_acc,amount)
+        self.transact(l_acc,acc_id,amount)
