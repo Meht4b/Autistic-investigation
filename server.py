@@ -44,6 +44,7 @@ def handleClient(conn):
             signupdetail = pickle.load(conn.recv(100))
             database.sign_up(signupdetail)
             acc_id = database.acc_id(signupdetail[0])
+            #note to mehtab-> implement check for existing user while signup
            
 
         

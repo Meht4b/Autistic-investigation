@@ -4,19 +4,29 @@ import pickle
 username=None
 password=None
 
+#default host,port
 host ='localhost'
 port = 8080
+
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 #function defenitions; most functions returns whatever the server sends 
 
-def connect(host,port):
+def connect(def_host,def_port):
 
     #Connect to server and returns server object
+    print("Leave blank for default")
+    host = input("Enter host IP Address:")
+    port = input("Enter host port:")
+
+    if host == "":
+        host=def_host
+    if port == "":
+        port=def_port
+
     server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     server.connect((host,port))
     socket.setdefaulttimeout(18.5)
-
     return server
 
 def login():
@@ -29,24 +39,25 @@ def login():
         #Login: Sends username and password
         username = input("Enter username")
         password = input("Enter password")
-        server.send(pickle.dumps(username,password,"L"))
-        return pickle.loads(server.recv(4096))[1]
-        
-
+        server.send(pickle.dumps((username,password)))
+        serverResponse = pickle.loads(server.recv(4096))
+        if serverResponse:
+            return ("Login Successful")
+        else:
+            return ("Error")
               
     else:
         #Signup: Creates account and sends request
-
+            server.send(pickle.dumps("S"))
             print("You are creating a new account")
             username    = input("Enter username:")
             password    = input("Enter password:")
             name        = input("Enter your name:")
             number      = input("Enter your number:")
             l_details   = (username,password,name,number)
-
-            server.send(pickle.dumps((username,password,"S")))
             server.send(pickle.dumps(l_details))
             return pickle.loads(server.recv(6940))
+            #note to vardhan - implement existing user check case
 
 def transact(reciever:int,amount:float):
     #Sends Transact request with Reciever's Acc_ID and amount to be transferred
