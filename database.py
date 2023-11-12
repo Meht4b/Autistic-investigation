@@ -24,6 +24,7 @@ class db:
                 #fix later (abhiske)
                 self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
                 self.connection.database = database_name
+                self.cursor.execute("SET FOREIGN_KEY_CHECKS=0") #According to google
                 self.cursor.execute("""
                     CREATE TABLE IF NOT EXISTS personal_details(acc_id int auto_increment primary key,username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10)
                     )
@@ -46,11 +47,11 @@ class db:
             
                 self.cursor.execute('insert into personal_details values(0,"admin","admin","admin","0")')
                 print("Admin Accounts into personal value.")
-                self.cursor.execute('insert into accounts values(0,10000000)')
+                self.cursor.execute('insert into accounts values(0,100000000)')
                 print("Admin Accounts into accounts")
                 self.connection.commit()
                 
-                
+                self.cursor.execute("SET FOREIGN_KEY_CHECKS=1") #According to google
             
         except Exception as e:
             print(e)

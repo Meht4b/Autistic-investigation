@@ -18,7 +18,7 @@ def connect(def_host,def_port):
     #Connect to server and returns server object
     print("Leave blank for default")
     host = input("Enter host IP Address:")
-    port = int(input("Enter host port:"))
+    port = input("Enter host port:")
 
     if host == "":
         host=def_host
@@ -26,9 +26,9 @@ def connect(def_host,def_port):
         port=def_port
 
     server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    server.connect((host,port))
+    server.connect((host,int(port)))
     socket.setdefaulttimeout(18.5)
-    
+    waitForInput=input("Connected. Press Enter to Continue.")
     return server
 
 def login():
