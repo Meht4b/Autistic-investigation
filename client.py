@@ -37,8 +37,10 @@ def login(server):
     #Returns Error/Confirmation message send from server
     os.system('cls')
     YesAccount=input("Login or Signup(L/S):")
-    
+
+
     if YesAccount.lower() == "l":
+        server.send(pickle.dumps('L'))
         #Login: Sends username and password
         username = input("Enter username")
         password = input("Enter password")

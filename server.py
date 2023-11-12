@@ -16,6 +16,7 @@ server.listen()
 #(self,host, user, password, database_name, )
 database = data_base.db('localhost','root','chungus','doraemon')
 
+print('listening')
 
 def handleClient(conn,addr):
 
@@ -94,7 +95,7 @@ def handleClient(conn,addr):
 while True:
     
     conn,addr = server.accept()
-
+    print(conn,addr)
     #create new thread once connnected
     thread = threading.Thread(target=handleClient,args=(conn,addr))
     thread.start()
