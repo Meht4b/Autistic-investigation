@@ -16,16 +16,18 @@ server.listen()
 #(self,host, user, password, database_name, )
 database = data_base.db('localhost','root','chungus','doraemon')
 
+print('listening')
 
-def handleClient(conn):
+def handleClient(conn,addr):
 
 
     try:
 
         loginSignup = pickle.loads(conn.recv(100))
+        print(loginSignup)
 
         if loginSignup == 'L':
-       
+            print("L recieved")
             #checks username and password;closes if they do not match
             username,password = pickle.loads(conn.recv(100))
 
@@ -39,9 +41,9 @@ def handleClient(conn):
                 return None
             
         if loginSignup == 'S':
-            
+            print("S recieved")
             #sign up
-            signupdetail = pickle.load(conn.recv(100))
+            signupdetail = pickle.loads(conn.recv(100))
             database.sign_up(signupdetail)
             acc_id = database.acc_id(signupdetail[0])
             #note to mehtab-> implement check for existing user while signup
@@ -85,16 +87,15 @@ def handleClient(conn):
                 break
                 
     except Exception as e:
-        print((addr,username),e)
-        conn.send(pickle.dumps(False))
+        print(e)
         return None        
 
 #accept connections
 while True:
     
     conn,addr = server.accept()
-
+    print(conn,addr)
     #create new thread once connnected
-    thread = threading.Thread(target=handleClient,args=(conn))
+    thread = threading.Thread(target=handleClient,args=(conn,addr))
     thread.start()
     
