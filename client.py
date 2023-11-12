@@ -49,7 +49,8 @@ def login(server):
         if serverResponse:
             return ("Login Successful")
         else:
-            return ("Error")
+            logout()
+            return False
               
     else:
         #Signup: Creates account and sends request
@@ -128,7 +129,14 @@ while True:
         while True:
 
             server=connect(host,port)
-            print(login(server))
+            responseLogin = login(server)
+            
+            if responseLogin:
+                print(responseLogin)
+            else:
+                print("error.")
+                ContinueLoop=input("Press Enter to continue.")
+                break
 
             print("""Bank Window
             1.Show Balance
