@@ -25,7 +25,7 @@ class db:
                 self.cursor.execute(f"CREATE DATABASE IF NOT EXISTS {database_name}")
                 self.connection.database = database_name
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS personal_details(username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10),acc_id auto_increment,primary key (acc_id)
+                    CREATE TABLE IF NOT EXISTS personal_details(acc_id int auto_increment primary key,username varchar(30) unique,password varchar(30),name varchar(25),phone_no varchar(10)
                     )
                     """)
                 self.cursor.execute("""
@@ -34,7 +34,7 @@ class db:
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS loan(L_id auto_increment ,bank_account int ,acc_id int,amount int,foreign key (acc_id) references personal_details(acc_id),primary key (L_id)
+                    CREATE TABLE IF NOT EXISTS loan(L_id int auto_increment primary key,bank_account int ,acc_id int,amount int,foreign key (acc_id) references personal_details(acc_id)
                     
                     )
                     """)
@@ -42,11 +42,14 @@ class db:
                     CREATE TABLE IF NOT EXISTS history(transaction_id int primary key,date varchar(20),from_acc int ,to_acc int ,amount int, foreign key (from_acc) references accounts(acc_id), foreign key (to_acc) references accounts(acc_id)
                     )
                     """)
-                
+                print("Successfuly initialized tables.")
             
-                self.cursor.execute('insert into personal_details values("admin","admin","admin","0")')
-                self.cursor.execute('insert into accounts values(0,1000000000000000)')
-
+                self.cursor.execute('insert into personal_details values(0,"admin","admin","admin","0")')
+                print("Admin Accounts into personal value.")
+                self.cursor.execute('insert into accounts values(0,10000000)')
+                print("Admin Accounts into accounts")
+                self.connection.commit()
+                
                 
             
         except Exception as e:
