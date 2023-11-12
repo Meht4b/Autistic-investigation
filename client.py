@@ -135,7 +135,7 @@ while True:
                 print(responseLogin)
             else:
                 print("error.")
-                ContinueLoop=input("Press Enter to continue.")
+                ContinueLoop=input("Press Enter to Continue.")
                 break
 
             print("""Bank Window
@@ -192,5 +192,5 @@ while True:
     #If any error occurs, print Error and continue the loop
     except Exception as E:
         print(E)
-        inp=input("Press Enter to continue.")
+        inp=input("Press Enter to Continue.")
 
