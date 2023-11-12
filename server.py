@@ -88,7 +88,6 @@ def handleClient(conn,addr):
                 
     except Exception as e:
         print(e)
-        conn.send(pickle.dumps(False))
         return None        
 
 #accept connections
