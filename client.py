@@ -31,7 +31,7 @@ def connect(def_host,def_port):
     waitForInput=input("Connected. Press Enter to Continue.")
     return server
 
-def login():
+def login(server):
 
     #Asks user if they want to Login/Signup
     #Returns Error/Confirmation message send from server
@@ -51,13 +51,14 @@ def login():
               
     else:
         #Signup: Creates account and sends request
-            server.send(pickle.dumps("S"))
+            
             print("You are creating a new account")
             username    = input("Enter username:")
             password    = input("Enter password:")
             name        = input("Enter your name:")
             number      = input("Enter your number:")
             l_details   = (username,password,name,number)
+            server.send(pickle.dumps("S"))
             server.send(pickle.dumps(l_details))
             os.system('cls')
 
@@ -124,8 +125,8 @@ while True:
     try:
         while True:
 
-            connect(host,port)
-            login()
+            server=connect(host,port)
+            print(login(server))
 
             print("""Bank Window
             1.Show Balance
