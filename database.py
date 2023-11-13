@@ -61,27 +61,8 @@ class db:
             cursor.execute(f'SELECT * FROM personal_details WHERE username ={username} AND password = {password}')
             return True
         except Exception:
-            return False
-        
+            return False        
         #return True if correct or False
-
-  
-
-class AccountInfoRetriever:
-    db_config = {
-    'host': '',
-    'user': '',
-    'password': '',
-    'database': ''
-}
-    def __init__(self, host, user, password, database):
-        self.connection = mysql.connector.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
-        )
-        self.cursor = self.connection.cursor()
 
     def get_account_info(self, username):
         query = f"SELECT * FROM personal_details WHERE username = '{username}'"
@@ -95,30 +76,13 @@ class AccountInfoRetriever:
                 'email': result['?'],  
                 
             }
-            return account_info
+            return (True,account_info)
         else:
-            return None
-
-    
+            return (False)
 
 
+  
 
-
-account_info_retriever = AccountInfoRetriever(**db_config)
-
-# Replace 'desired_username' with the actual username you want to retrieve information for
-username_to_query = 'desired_username'
-result = account_info_retriever.get_account_info(username_to_query)
-
-if result:
-    print("Account Information:")
-    print(result)
-else:
-    print(f"No account found for the username: {username_to_query}")
-
-account_info_retriever.close_connection()
-
-        #return int 
 
     def name(self,acc_id:int):
         pass
