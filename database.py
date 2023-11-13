@@ -61,13 +61,32 @@ class db:
             cursor.execute(f'SELECT * FROM personal_details WHERE username ={username} AND password = {password}')
             return True
         except Exception:
-            return False
-        
+            return False        
         #return True if correct or False
 
     def acc_id(self,username):
         pass
         #return tuple(True/False,acc_id)
+    
+    def get_account_info(self, username):
+        query = f"SELECT * FROM personal_details WHERE username = '{username}'"
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+
+        if result:
+            account_info = {
+                'username': result[0],  
+                'full_name': result[4],  
+                'email': result['?'],  
+                
+            }
+            return (True,account_info)
+        else:
+            return (False)
+
+
+  
+
 
     def name(self,acc_id:int):
         pass
