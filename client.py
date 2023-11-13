@@ -110,12 +110,20 @@ def lookup(value:int or str):
     #Checks if value is an integer(acc_id); returns corresponding username
     if isinstance(value,int):
         server.send(pickle.dumps(("name",value)))
-        return pickle.loads(server.recv(4096))
+        name = pickle.loads(server.recv(4096))
+        if not name[0]:
+            raise ValueError("Invalid acc_ID")
+        else:
+            return name[1]
     
     #checks if value is a string(username); returns corresponding acc_id
     elif isinstance(value,str):
         server.send(pickle.dumps(("acc_id",value)))
-        return pickle.loads(server.recv(4096))
+        name = pickle.loads(server.recv(4096))
+        if not name[0]:
+            raise ValueError("Invalid acc_ID")
+        else:
+            return name[1]
 
 def logout():
     os.system('cls')

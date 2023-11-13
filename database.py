@@ -65,13 +65,13 @@ class db:
         
         #return True if correct or False
 
-    def acc_id(self,username,password,name,phoneno):
+    def acc_id(self,username):
         pass
-        #return int 
+        #return tuple(True/False,acc_id)
 
     def name(self,acc_id:int):
         pass
-        #return tuple
+        #return tuple(True/False,name)
         
     def transact(self,from_id,to_id,amount):
         pass

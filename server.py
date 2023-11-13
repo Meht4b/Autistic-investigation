@@ -54,15 +54,19 @@ def handleClient(conn,addr):
         while True:
             req = pickle.loads(conn.recv())
 
-            #request = ('transaction','to acc_id','amount')
+            #request = ('transaction',('to acc_id','amount'))
             if req[0]=='transact':
-                conn.send(pickle.dumps(database.transact(acc_id,req[1],req[2])))
+                conn.send(pickle.dumps(database.transact(acc_id,req[1][1],req[1][2])))
             
             #withdraw = (withdraw,amount)
             if req[0]=='withdraw':
                 conn.send(pickle.dumps(database.transact(acc_id,0,req[1])))
 
-            #deposit
+            #deposit = (deposit,amount)
+            if req[0]=='deposit':
+                conn.send(pickle.dumps(database.transact(0,acc_id,req[1])))
+            
+            #balance
             if req[0]=='balance':
                 conn.send(pickle.dumps(database.balance(acc_id)))
 
@@ -78,9 +82,6 @@ def handleClient(conn,addr):
             
             if req[0]=='loan':
                 conn.send(pickle.dumps(database.loan(database,acc_id,req[1])))
-
-            #note for metab add name(request is "name" and ill send account id nd ull return username)
-            #|||ly just do same for if i send "acc_id" send acc id of recieved username
 
             if req[0]=='disconnect':
                 conn.close()
