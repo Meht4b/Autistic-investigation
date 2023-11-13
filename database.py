@@ -65,8 +65,59 @@ class db:
         
         #return True if correct or False
 
-    def acc_id(self,username,password,name,phoneno):
-        pass
+  
+
+class AccountInfoRetriever:
+    db_config = {
+    'host': '',
+    'user': '',
+    'password': '',
+    'database': ''
+}
+    def __init__(self, host, user, password, database):
+        self.connection = mysql.connector.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+        self.cursor = self.connection.cursor()
+
+    def get_account_info(self, username):
+        query = f"SELECT * FROM personal_details WHERE username = '{username}'"
+        self.cursor.execute(query)
+        result = self.cursor.fetchone()
+
+        if result:
+            account_info = {
+                'username': result[0],  
+                'full_name': result[4],  
+                'email': result['?'],  
+                
+            }
+            return account_info
+        else:
+            return None
+
+    
+
+
+
+
+account_info_retriever = AccountInfoRetriever(**db_config)
+
+# Replace 'desired_username' with the actual username you want to retrieve information for
+username_to_query = 'desired_username'
+result = account_info_retriever.get_account_info(username_to_query)
+
+if result:
+    print("Account Information:")
+    print(result)
+else:
+    print(f"No account found for the username: {username_to_query}")
+
+account_info_retriever.close_connection()
+
         #return int 
 
     def name(self,acc_id:int):
