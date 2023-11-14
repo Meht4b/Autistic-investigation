@@ -96,9 +96,9 @@ class db:
         pass
         #no tuple
 
-    def sign_up(self,username,passwd,):
+    def sign_up(self,details):   #details= (username,password,name,number)
         pass
-        #no tuple
+        #Return True/False
 
     def history():
         pass

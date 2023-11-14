@@ -12,6 +12,12 @@ port = 8080
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
 
+#disconnect function:
+def disconnect(conn,message):
+    conn.send(pickle.dumps(("Disconnect",message)))
+    conn.close
+    return True
+
 server.listen()
 #(self,host, user, password, database_name, )
 database = data_base.db('localhost','root','chungus','doraemon')
@@ -44,7 +50,7 @@ def handleClient(conn,addr):
             print("S recieved")
             #sign up
             signupdetail = pickle.loads(conn.recv(100))
-            database.sign_up(signupdetail)
+            conn.send(pickle.dumps(database.sign_up(signupdetail)))
             acc_id = database.acc_id(signupdetail[0])
             #note to mehtab-> implement check for existing user while signup
            
@@ -52,7 +58,7 @@ def handleClient(conn,addr):
         
         #request cycle 
         while True:
-            req = pickle.loads(conn.recv())
+            req = pickle.loads(conn.recv(5000))
 
             #request = ('transaction',('to acc_id','amount'))
             if req[0]=='transact':
@@ -84,8 +90,7 @@ def handleClient(conn,addr):
                 conn.send(pickle.dumps(database.loan(database,acc_id,req[1])))
 
             if req[0]=='disconnect':
-                conn.close()
-                break
+                disconnect(conn,"Connection Terminated")
                 
     except Exception as e:
         print(e)
