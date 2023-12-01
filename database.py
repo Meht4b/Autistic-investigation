@@ -108,9 +108,9 @@ class db:
 
         self.cursor.execute(f'insert into loan (acc_id,amount) values ({acc_id},{amount})')
         
-        l_id = self.cursor.execute('select last_insert_id()') #code to get L_id of last added record
+        l_id = self.cursor.execute('select last_insert_id()')[0][0] #code to get L_id of last added record
         self.sign_up(f'LOAN_{l_id}','admin')
         
-        l_acc = None #code to get bank account of loan
+        l_acc = self.cursor.execute('select last_insert_id()')[0][0] #code to get bank account of loan
         self.transact(0,l_acc,amount)
         self.transact(l_acc,acc_id,amount)
