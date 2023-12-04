@@ -68,36 +68,48 @@ class db:
         
         #return True if correct or False
 
-
     def acc_id(self,username):
-        pass
+        try:
+            self.cursor.execute(f'select acc_id from personal_details where username={username}')
+            return (True,self.cursor.fetchone()[0])
+        except Exception as e:
+            return (False,e)
         #return tuple(True/False,acc_id)
 
-
     def get_account_info(self, username):
-        query = f"SELECT * FROM personal_details WHERE username = '{username}'"
-        self.cursor.execute(query)
-        result = self.cursor.fetchone()
+        try:
+            query = f"SELECT * FROM personal_details WHERE username = '{username}'"
+            self.cursor.execute(query)
+            result = self.cursor.fetchone()
 
-        if result:
-            account_info = {
-                'username': result[0],  
-                'full_name': result[4],  
-                'email': result['?'],  
-                
-            }
-            return (True,account_info)
-        else:
-            return (False)
-
-
+            if result:
+                account_info = {
+                    'username': result[0],  
+                    'full_name': result[4],  
+                    'email': result['?'],  
+                    
+                }
+                return (True,account_info)
+            else:
+                return (False,None)
+        except Exception as e:
+            return (False,e)
+        
     def name(self,acc_id:int):
-        pass
+        try:
+            self.cursor.execute(f'select username from personal_details where acc_id ={acc_id}')
+            return (True,self.cursor.fetchone()[0])
+        except Exception as e:
+            return (False,e)
         #return tuple(True/False,name)
         
     def transact(self,from_id,to_id,amount):
-        pass
-        #no tuple
+        try:
+            self.cursor.execute(f'update accounts set balance = balance + amount where acc_id = {to_id}')
+            self.cursor.execute(f'update accounts set balance = balance - amount where acc_id = {from_id}')
+            return (True,)
+        except Exception as e:
+            return (False,e)
 
     def sign_up(self,details):  
         try: #details= (username,password,name,number)
@@ -110,9 +122,12 @@ class db:
             self.connection.rollback()
             return (False,e)
 
-    def history():
-        pass
-        #return tuple(tuple)
+    def history(self,acc_id,offset,lim):
+        try:
+            self.cursor.execute(f'select transaction_id,date,from_acc,a.name,to_acc,b.name where from_acc = {acc_id} or to_acc = {acc_id} join personal_details as a on from_acc = a.acc_id join personal_details as b on to_acc = b.acc_id limit {lim} offset {offset}')#not sure if works
+            return (True,self.cursor.fetchall())
+        except Exception as e:
+            return (False,e)
 
     def loan(self,acc_id,amount):
 
