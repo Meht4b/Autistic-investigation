@@ -64,10 +64,12 @@ class db:
             return False        
         #return True if correct or False
 
+
     def acc_id(self,username):
         pass
         #return tuple(True/False,acc_id)
-    
+
+
     def get_account_info(self, username):
         query = f"SELECT * FROM personal_details WHERE username = '{username}'"
         self.cursor.execute(query)
@@ -85,9 +87,6 @@ class db:
             return (False)
 
 
-  
-
-
     def name(self,acc_id:int):
         pass
         #return tuple(True/False,name)
@@ -96,9 +95,16 @@ class db:
         pass
         #no tuple
 
-    def sign_up(self,details):   #details= (username,password,name,number)
-        pass
-        #Return True/False
+    def sign_up(self,details):  
+        try: #details= (username,password,name,number)
+            self.cursor.execute('INSERT INTO personal_details (username,password,name,number) VALUES (%s, %s,%s,%s)',details)
+            id = self.cursor.lastrowid
+            self.cursor.execute('INSERT INTO accounts values (%s,%s)',(str(id),str(0)))
+            self.connection.commit()
+            return (True,id)
+        except Exception as e:
+            self.connection.rollback()
+            return (False,e)
 
     def history():
         pass
@@ -106,11 +112,15 @@ class db:
 
     def loan(self,acc_id,amount):
 
-        self.cursor.execute(f'insert into loan (acc_id,amount) values ({acc_id},{amount})')
-        
-        l_id = self.cursor.execute('select last_insert_id()')[0][0] #code to get L_id of last added record
-        self.sign_up(f'LOAN_{l_id}','admin')
-        
-        l_acc = self.cursor.execute('select last_insert_id()')[0][0] #code to get bank account of loan
-        self.transact(0,l_acc,amount)
-        self.transact(l_acc,acc_id,amount)
+        try:
+            self.cursor.execute(f'insert into loan (acc_id,amount) values ({acc_id},{amount})')
+            
+            l_id = self.cursor.lastrowid #code to get L_id of last added record
+            l_acc = self.sign_up((f'LOAN_{l_id}','admin',f'bank_loan_{l_id}','NULL')) #code to get bank account of loan use fetchone
+
+            self.transact(0,l_acc,amount)
+            self.transact(l_acc,acc_id,amount)
+
+            return (True,)
+        except Exception as e:
+            return (False,e)
