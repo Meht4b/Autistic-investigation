@@ -56,12 +56,16 @@ class db:
         except Exception as e:
             print(e)
 
-    def user_check(username,password,cursor):
+    def user_check(self,username,password):
         try:
-            cursor.execute(f'SELECT * FROM personal_details WHERE username ={username} AND password = {password}')
-            return True
-        except Exception:
-            return False        
+            p = self.cursor.execute(f'SELECT password FROM personal_details WHERE username = {username}')
+            if p == password:
+                return (True,'correct password')
+            else:
+                return (False,'incorrect password')
+        except Exception as e:
+            return (False,e)
+        
         #return True if correct or False
 
 
