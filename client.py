@@ -46,11 +46,12 @@ def login(server):
         password = input("Enter password")
         server.send(pickle.dumps((username,password)))
         serverResponse = pickle.loads(server.recv(4096))
-        if serverResponse:
-            return ("Login Successful")
+        if serverResponse[0]:
+            return (True,"Login Successful")
         else:
+            
             logout()
-            return False
+            return False,serverResponse[1]#returns error too
               
     else:
         #Signup: Creates account and sends request
@@ -98,10 +99,10 @@ def balance():
     server.send(pickle.dumps(("balance",)))
     return pickle.loads(server.recv(4096))  # returns whatever the server sends
 
-def history():
+def history(limit,offset): #inorder to make it in pages just give offsett as 0 and limit as 100 for now 
     os.system('cls')
     #sends history request
-    server.send(pickle.dumps((history,())))
+    server.send(pickle.dumps(('history',(offset,limit))))
     return pickle.loads(server.recv(8192))  # returns whatever the server sends
 
 def lookup(value:int or str):
@@ -190,7 +191,8 @@ while True:
                         print(transact(lookup(value),amt))
 
             elif ch == 5:
-                print(history())     
+                for i in history(100,0):
+                    print(i)    
    
             elif ch == 6:
                 print(logout())                       

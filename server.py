@@ -62,7 +62,7 @@ def handleClient(conn,addr):
 
             #request = ('transaction',('to acc_id','amount'))
             if req[0]=='transact':
-                conn.send(pickle.dumps(database.transact(acc_id,req[1][1],req[1][2])))
+                conn.send(pickle.dumps(database.transact(acc_id,req[1][0],req[1][1])))
             
             #withdraw = (withdraw,amount)
             elif req[0]=='withdraw':
@@ -78,7 +78,7 @@ def handleClient(conn,addr):
 
             #history 
             elif req[0]=='history':
-                conn.send(pickle.dumps(database.history(acc_id)))
+                conn.send(pickle.dumps(database.history(acc_id,req[1][0],req[1][1])))
 
             elif req[0]=='name':
                 conn.send(pickle.dumps(database.name(req[1])))

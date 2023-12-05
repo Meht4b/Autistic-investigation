@@ -105,8 +105,8 @@ class db:
         
     def transact(self,from_id,to_id,amount):
         try:
-            self.cursor.execute(f'update accounts set balance = balance + amount where acc_id = {to_id}')
-            self.cursor.execute(f'update accounts set balance = balance - amount where acc_id = {from_id}')
+            self.cursor.execute(f'update accounts set balance = balance + {amount} where acc_id = {to_id}')
+            self.cursor.execute(f'update accounts set balance = balance - {amount} where acc_id = {from_id}')
             return (True,)
         except Exception as e:
             return (False,e)
