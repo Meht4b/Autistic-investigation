@@ -40,9 +40,10 @@ def handleClient(conn,addr):
             username,password = pickle.loads(conn.recv(100))
             response = database.user_check(username,password)
 
-            if response:
+            if response[0]:
                 conn.send(pickle.dumps(response))
-                acc_id = database.acc_id(username)
+                acc_id = database.acc_id(username)[1]
+                print(acc_id)
 
             else:
                 conn.send(pickle.dumps(response))
@@ -69,11 +70,11 @@ def handleClient(conn,addr):
             
             #withdraw = (withdraw,amount)
             elif req[0]=='withdraw':
-                conn.send(pickle.dumps(database.transact(acc_id,0,req[1])))
+                conn.send(pickle.dumps(database.transact(acc_id,1,req[1])))
 
             #deposit = (deposit,amount)
             elif req[0]=='deposit':
-                conn.send(pickle.dumps(database.transact(0,acc_id,req[1])))
+                conn.send(pickle.dumps(database.transact(1,acc_id,req[1])))
             
             #balance
             elif req[0]=='balance':
