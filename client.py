@@ -17,7 +17,7 @@ server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 def integerize(prompt):
      while True:
             try:
-                 return int(input(prompt))
+                 return int(input(f"{prompt}:"))
             except ValueError:
                  print("enter number")
 
@@ -69,6 +69,13 @@ def login(server):
             name        = input("Enter your name:")
             number      = input("Enter your number:")
             l_details   = (username,password,name,number)
+
+            while True:
+                if not username.isnumeric():
+                    break
+                else:
+                    print("Username can't be purely numeric.")
+                    username = input("Enter username:")
             server.send(pickle.dumps("S"))
             server.send(pickle.dumps(l_details))
             os.system('cls')
@@ -202,7 +209,7 @@ while True:
 
                     value = input("Enter reciever's Account ID or username:")
                     
-                    if isinstance(value,int):
+                    if value.isnumeric():
                         #Incase user enters acc_id
 
                         surity = input(f"Are you sure you want to transact to username @{lookup(int(value))}(Y/N):")
