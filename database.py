@@ -144,3 +144,9 @@ class db:
         except Exception as e:
             return (False,e)
         
+    def balance(self,acc_id):
+        try:
+            self.cursor.execute('select balance from accounts where acc_id = acc_id')
+            return (True,self.cursor.fetchone()[0])
+        except Exception as e:
+            return (False, e)
