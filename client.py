@@ -182,7 +182,7 @@ while True:
         if responseLogin[0]:
             print(responseLogin)
             while True:
-                
+                os.system('cls')
                 print("""Bank Window
                 1.Show Balance
                 2.Deposit
