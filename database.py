@@ -78,20 +78,14 @@ class db:
             return (False,e)
         #return tuple(True/False,acc_id)
 
-    def get_account_info(self, username):
+    def get_account_info(self, acc_id):
         try:
-            query = f"SELECT * FROM personal_details WHERE username = '{username}'"
+            query = f"SELECT acc_id,username,name,phone_no,balance FROM personal_details join accounts on personal_details.acc_id = accounts.acc_id and personal_details.acc_id = {acc_id}"
             self.cursor.execute(query)
             result = self.cursor.fetchone()
-
+            self.cursor = self.connection.cursor()
             if result:
-                account_info = {
-                    'username': result[0],  
-                    'full_name': result[4],  
-                    'email': result['?'],  
-                    
-                }
-                return (True,account_info)
+                return (True,result)
             else:
                 return (False,None)
         except Exception as e:
@@ -117,7 +111,7 @@ class db:
         except Exception as e:
             return (False,e)
 
-    def sign_up(self,details):  #details= (username,password,name,number)
+    def sign_up(self,details):  #details= (username,password,name,number) returns (True/false,)
         try: 
             self.cursor.execute('INSERT INTO personal_details (username,password,name,phone_no) VALUES (%s, %s,%s,%s)',details)
             id = self.cursor.lastrowid
@@ -129,10 +123,11 @@ class db:
             self.connection.rollback()
             return (False,e)
 
-    def history(self,acc_id,offset,lim):
+    def history(self,acc_id,offset,lim): #returns (True,list[list[]]) where each list represents transaction 
         try:
             self.cursor.execute(f'select transaction_id,date,from_acc,a.name,to_acc,b.name from history join personal_details as a on from_acc = a.acc_id and (from_acc = {acc_id} or to_acc = {acc_id}) join personal_details as b on to_acc = b.acc_id limit {lim} offset {offset}')#not sure if works
             return (True,self.cursor.fetchall())
+        
         except Exception as e:
             return (False,e)
 
