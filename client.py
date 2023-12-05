@@ -12,6 +12,14 @@ port = 8080
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
 #function defenitions; most functions returns whatever the server sends 
+#^ fix this comment later
+
+def integerize(prompt):
+     while True:
+            try:
+                 return int(input(prompt))
+            except ValueError:
+                 print("enter number")
 
 def connect(def_host,def_port):
     os.system('cls')
@@ -78,19 +86,25 @@ def transact(reciever:int,amount:float):
     else:
         print(response[1])
 
-def withdraw(amount:float):
+def withdraw():
+    amount = integerize("Enter amount to be withdrawn")
     os.system('cls')
     #sends withdraw request with amount to be withdrawn
     server.send(pickle.dumps(("withdraw",amount)))
-    return pickle.loads(server.recv(4096))  # returns whatever the server sends
+    response_withdraw = pickle.loads(server.recv(4096))
+    if response_withdraw[0]:
+        print(f"Withdrew ${amount}")
+    else:
+        print(response_withdraw[1])
 
-def deposit(amount:float):
+def deposit():
+    amount=integerize("Enter amount to be deposited")
     os.system('cls')
     #sends deposit request with amount to be deposited
     server.send(pickle.dumps(("deposit",amount)))
-    return pickle.loads(server.recv(4096))  # returns whatever the server sends
+    deposit_Response = pickle.loads(server.recv(4096)) 
 
-def loan(amount:float):
+def loan():
     os.system('cls')
     #sends loan request with amount of loan
     server.send(pickle.dumps(("loan",amount)))
@@ -105,8 +119,13 @@ def balance():
 def history(limit,offset): #inorder to make it in pages just give offsett as 0 and limit as 100 for now 
     os.system('cls')
     #sends history request
+    offset,limit=0,100 # for now
     server.send(pickle.dumps(('history',(offset,limit))))
-    return pickle.loads(server.recv(8192))  # returns whatever the server sends
+    response_History = pickle.loads(server.recv(8192))  # returns whatever the server sends
+    if response_History[1]:
+        for row in response_History[2]:
+            for field in row:
+                print(field,end="\t")
 
 def lookup(value:int or str):
     #returns corresponding name/acc_id of input value
