@@ -60,7 +60,7 @@ class db:
     def user_check(self,username,password):
         try:
             self.cursor.execute("SELECT password FROM personal_details WHERE username = %s",(username,))
-            if self.cursor.fetchone()[0] == password:
+            if self.cursor.fetchall()[0][0] == password:
                 return (True,'correct password')
             else:
                 return (False,'incorrect password')
@@ -73,16 +73,16 @@ class db:
     def acc_id(self,username):
         try:
             self.cursor.execute(f'select acc_id from personal_details where username="{username}"')
-            return (True,self.cursor.fetchone()[0])
+            return (True,self.cursor.fetchall()[0][0])
         except Exception as e:
             return (False,e)
         #return tuple(True/False,acc_id)
 
-    def get_account_info(self, acc_id):
+    def get_account_info(self, acc_id): #returns (true/false,[acc_id,username,name,phone_no,balance])
         try:
             query = f"SELECT acc_id,username,name,phone_no,balance FROM personal_details join accounts on personal_details.acc_id = accounts.acc_id and personal_details.acc_id = {acc_id}"
             self.cursor.execute(query)
-            result = self.cursor.fetchone()
+            result = self.cursor.fetchall()[0]
             self.cursor = self.connection.cursor()
             if result:
                 return (True,result)
@@ -94,7 +94,7 @@ class db:
     def name(self,acc_id:int):
         try:
             self.cursor.execute(f'select username from personal_details where acc_id ={acc_id}')
-            return (True,self.cursor.fetchone()[0])
+            return (True,self.cursor.fetchall()[0][0])
         except Exception as e:
             return (False,e)
         #return tuple(True/False,name)
