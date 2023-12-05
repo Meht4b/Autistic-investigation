@@ -200,7 +200,7 @@ while True:
                     #runs transact() with proper arguments depending on user input
 
 
-                    value = print("Enter reciever's Account ID or username:")
+                    value = input("Enter reciever's Account ID or username:")
                     
                     if isinstance(value,int):
                         #Incase user enters acc_id
@@ -213,7 +213,7 @@ while True:
                     else:
                         #Incase user enters username
 
-                        surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
+                        surity = input(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
                         if surity.lower in ["yes","y"]:
                             amt = int(input(f"Enter amount to be transferred to {value}:"))
                             transact(lookup(value),amt)
