@@ -41,14 +41,14 @@ class db:
                     )
                     """)
                 self.cursor.execute("""
-                    CREATE TABLE IF NOT EXISTS history(transaction_id int primary key,date varchar(20),from_acc int ,to_acc int ,amount int, foreign key (from_acc) references accounts(acc_id), foreign key (to_acc) references accounts(acc_id)
+                    CREATE TABLE IF NOT EXISTS history(transaction_id int auto_increment primary key,date DATETIME,from_acc int ,to_acc int ,amount int, foreign key (from_acc) references accounts(acc_id), foreign key (to_acc) references accounts(acc_id)
                     )
                     """)
                 print("Successfuly initialized tables.")
             
                 self.cursor.execute('insert into personal_details values(0,"admin","admin","admin","0")')
                 print("Admin Accounts into personal value.")
-                self.cursor.execute('insert into accounts values(0,100000000)')
+                self.cursor.execute('insert into accounts values(1,100000000)')
                 print("Admin Accounts into accounts")
                 self.connection.commit()
                 
@@ -108,14 +108,18 @@ class db:
         
     def transact(self,from_id,to_id,amount):
         try:
-            self.cursor.execute(f'update accounts set balance = balance + {amount} where acc_id = {to_id}')
+            if amount>self.balance(from_id)[1]:
+                return (False,'insufficient balance')
+            self.cursor.execute(f'update accounts set balance = balance + {amount} where acc_id = {to_id}')           
             self.cursor.execute(f'update accounts set balance = balance - {amount} where acc_id = {from_id}')
+            self.cursor.execute(f'insert into history (date,from_acc,to_acc,amount) values (curdate(),{from_id},{to_id},{amount})')
+            self.connection.commit()
             return (True,)
         except Exception as e:
             return (False,e)
 
-    def sign_up(self,details):  
-        try: #details= (username,password,name,number)
+    def sign_up(self,details):  #details= (username,password,name,number)
+        try: 
             self.cursor.execute('INSERT INTO personal_details (username,password,name,phone_no) VALUES (%s, %s,%s,%s)',details)
             id = self.cursor.lastrowid
             self.cursor.execute('INSERT INTO accounts values (%s,%s)',(str(id),str(0)))
@@ -127,7 +131,7 @@ class db:
 
     def history(self,acc_id,offset,lim):
         try:
-            self.cursor.execute(f'select transaction_id,date,from_acc,a.name,to_acc,b.name where from_acc = {acc_id} or to_acc = {acc_id} join personal_details as a on from_acc = a.acc_id join personal_details as b on to_acc = b.acc_id limit {lim} offset {offset}')#not sure if works
+            self.cursor.execute(f'select transaction_id,date,from_acc,a.name,to_acc,b.name from history join personal_details as a on from_acc = a.acc_id and (from_acc = {acc_id} or to_acc = {acc_id}) join personal_details as b on to_acc = b.acc_id limit {lim} offset {offset}')#not sure if works
             return (True,self.cursor.fetchall())
         except Exception as e:
             return (False,e)
@@ -138,9 +142,9 @@ class db:
             self.cursor.execute(f'insert into loan (acc_id,amount) values ({acc_id},{amount})')
             
             l_id = self.cursor.lastrowid #code to get L_id of last added record
-            l_acc = self.sign_up((f'LOAN_{l_id}','admin',f'bank_loan_{l_id}','NULL')) #code to get bank account of loan use fetchone
-
-            self.transact(0,l_acc,amount)
+            l_acc = self.sign_up((f'LOAN_{l_id}','admin',f'bank_loan_{l_id}','NULL'))[1] #code to get bank account of loan use fetchone
+            self.cursor.execute(f'update loan set bank_account = {l_acc} where L_id = {l_id}')
+            self.transact(1,l_acc,amount)
             self.transact(l_acc,acc_id,amount)
 
             return (True,)
@@ -153,3 +157,5 @@ class db:
             return (True,self.cursor.fetchall()[0][0])
         except Exception as e:
             return (False, e)
+
+
