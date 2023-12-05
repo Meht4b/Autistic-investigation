@@ -1,4 +1,4 @@
-    #abhishek
+
 import mysql.connector
 class db:
     
