@@ -53,8 +53,7 @@ class db:
                 self.connection.commit()
                 
                 self.cursor.execute("SET FOREIGN_KEY_CHECKS=1") #According to google
-                print('hello')
-            
+
         except Exception as e:
             print(e)
 
@@ -73,7 +72,7 @@ class db:
 
     def acc_id(self,username):
         try:
-            self.cursor.execute(f'select acc_id from personal_details where username={username}')
+            self.cursor.execute(f'select acc_id from personal_details where username="{username}"')
             return (True,self.cursor.fetchone()[0])
         except Exception as e:
             return (False,e)
@@ -124,6 +123,7 @@ class db:
             id = self.cursor.lastrowid
             self.cursor.execute('INSERT INTO accounts values (%s,%s)',(str(id),str(0)))
             self.connection.commit()
+            self.cursor = self.connection.cursor()
             return (True,id)
         except Exception as e:
             self.connection.rollback()

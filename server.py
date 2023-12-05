@@ -19,7 +19,7 @@ def disconnect(conn,message):
     return True
 
 
-database = data_base.db('localhost','root','password','doraemon')
+database = data_base.db('localhost','root','password','test')
 server.listen()
 #(self,host, user, password, database_name, )
 
