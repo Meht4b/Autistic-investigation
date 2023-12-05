@@ -137,7 +137,7 @@ class db:
             self.cursor.execute(f'insert into loan (acc_id,amount) values ({acc_id},{amount})')
             
             l_id = self.cursor.lastrowid #code to get L_id of last added record
-            l_acc = self.sign_up((f'LOAN_{l_id}','admin',f'bank_loan_{l_id}','NULL'))[1] #code to get bank account of loan use fetchone
+            l_acc = self.sign_up((f'LOAN_{l_id}','admin',f'bank_loan_{l_id}','NULL'))[1] #code to get bank account of loan use 
             self.cursor.execute(f'update loan set bank_account = {l_acc} where L_id = {l_id}')
             self.transact(1,l_acc,amount)
             self.transact(l_acc,acc_id,amount)
