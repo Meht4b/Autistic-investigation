@@ -134,7 +134,7 @@ def balance():
     response_Balance = pickle.loads(server.recv(4096))
     print(response_Balance[1])
 
-def history(limit,offset): #inorder to make it in pages just give offsett as 0 and limit as 100 for now 
+def history(): #inorder to make it in pages just give offsett as 0 and limit as 100 for now 
     os.system('cls')
     #sends history request
     offset,limit=0,100 # for now
