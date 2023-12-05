@@ -214,7 +214,7 @@ while True:
 
                         surity = input(f"Are you sure you want to transact to username @{lookup(int(value))}(Y/N):")
                         if surity.lower in ["yes","y"]:
-                            amt = int(input(f"Enter amount to be transferred to {lookup(int(value))}:"))
+                            amt = integerize(f"Enter amount to be transferred to {lookup(int(value))}:")
                             transact(value,amt)
 
                     else:
@@ -222,7 +222,7 @@ while True:
 
                         surity = input(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
                         if surity.lower in ["yes","y"]:
-                            amt = int(input(f"Enter amount to be transferred to {value}:"))
+                            amt = integerize(f"Enter amount to be transferred to {value}:")
                             transact(lookup(value),amt)
 
                 elif ch == 5:
