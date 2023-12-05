@@ -65,32 +65,35 @@ def handleClient(conn,addr):
                 conn.send(pickle.dumps(database.transact(acc_id,req[1][1],req[1][2])))
             
             #withdraw = (withdraw,amount)
-            if req[0]=='withdraw':
+            elif req[0]=='withdraw':
                 conn.send(pickle.dumps(database.transact(acc_id,0,req[1])))
 
             #deposit = (deposit,amount)
-            if req[0]=='deposit':
+            elif req[0]=='deposit':
                 conn.send(pickle.dumps(database.transact(0,acc_id,req[1])))
             
             #balance
-            if req[0]=='balance':
+            elif req[0]=='balance':
                 conn.send(pickle.dumps(database.balance(acc_id)))
 
             #history 
-            if req[0]=='history':
+            elif req[0]=='history':
                 conn.send(pickle.dumps(database.history(acc_id)))
 
-            if req[0]=='name':
+            elif req[0]=='name':
                 conn.send(pickle.dumps(database.name(req[1])))
             
-            if req[0]=='acc_id':
+            elif req[0]=='acc_id':
                 conn.send(pickle.dumps(database.acc_id(req[1])))
             
-            if req[0]=='loan':
+            elif req[0]=='loan':
                 conn.send(pickle.dumps(database.loan(database,acc_id,req[1])))
 
-            if req[0]=='disconnect':
+            elif req[0]=='disconnect':
                 disconnect(conn,"Connection Terminated")
+            
+            else:
+                conn.send(pickle.dumps((False,'bad request')))
                 
     except Exception as e:
         print(e)
