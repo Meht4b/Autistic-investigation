@@ -243,6 +243,6 @@ while True:
             
     #If any error occurs, print Error and continue the loop
     except Exception as E:
-        print(E)
+        print(f"Error: {E}")
         inp=input("Press Enter to Continue.")
 
