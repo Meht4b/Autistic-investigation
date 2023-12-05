@@ -18,9 +18,11 @@ def disconnect(conn,message):
     conn.close
     return True
 
+
+database = data_base.db('localhost','root','password','doraemon')
 server.listen()
 #(self,host, user, password, database_name, )
-database = data_base.db('localhost','root','chungus','doraemon')
+
 
 print('listening')
 
@@ -36,13 +38,14 @@ def handleClient(conn,addr):
             print("L recieved")
             #checks username and password;closes if they do not match
             username,password = pickle.loads(conn.recv(100))
+            response = database.user_check(username,password)
 
-            if database.user_check(username,password):
-                conn.send(pickle.dumps(True))
+            if response:
+                conn.send(pickle.dumps(response))
                 acc_id = database.acc_id(username)
 
             else:
-                conn.send(pickle.dumps(False))
+                conn.send(pickle.dumps(response))
                 conn.close()
                 return None
             

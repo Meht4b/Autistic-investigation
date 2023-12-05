@@ -13,7 +13,8 @@ class db:
             self.connection = mysql.connector.connect(
                 host=host,
                 user=user,
-                password=password
+                password=password,
+                auth_plugin='mysql_native_password' #can delete if not work
             )
 
             if self.connection.is_connected():
@@ -52,19 +53,21 @@ class db:
                 self.connection.commit()
                 
                 self.cursor.execute("SET FOREIGN_KEY_CHECKS=1") #According to google
+                print('hello')
             
         except Exception as e:
             print(e)
 
     def user_check(self,username,password):
         try:
-            p = self.cursor.execute(f'SELECT password FROM personal_details WHERE username = {username}')
-            if p == password:
+            self.cursor.execute("SELECT password FROM personal_details WHERE username = %s",(username,))
+            if self.cursor.fetchone()[0] == password:
                 return (True,'correct password')
             else:
                 return (False,'incorrect password')
         except Exception as e:
             return (False,e)
+        
         
         #return True if correct or False
 
@@ -113,7 +116,7 @@ class db:
 
     def sign_up(self,details):  
         try: #details= (username,password,name,number)
-            self.cursor.execute('INSERT INTO personal_details (username,password,name,number) VALUES (%s, %s,%s,%s)',details)
+            self.cursor.execute('INSERT INTO personal_details (username,password,name,phone_no) VALUES (%s, %s,%s,%s)',details)
             id = self.cursor.lastrowid
             self.cursor.execute('INSERT INTO accounts values (%s,%s)',(str(id),str(0)))
             self.connection.commit()
@@ -146,7 +149,7 @@ class db:
         
     def balance(self,acc_id):
         try:
-            self.cursor.execute('select balance from accounts where acc_id = acc_id')
-            return (True,self.cursor.fetchone()[0])
+            self.cursor.execute(f'select balance from accounts where acc_id = "{acc_id}"')
+            return (True,self.cursor.fetchall()[0][0])
         except Exception as e:
             return (False, e)

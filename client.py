@@ -48,10 +48,9 @@ def login(server):
         serverResponse = pickle.loads(server.recv(4096))
         if serverResponse[0]:
             return (True,"Login Successful")
-        else:
-            
+        else:            
             logout()
-            return False,serverResponse[1]#returns error too
+            return serverResponse #returns error too
               
     else:
         #Signup: Creates account and sends request
@@ -140,12 +139,13 @@ while True:
             server=connect(host,port)
             responseLogin = login(server)
             
-            if responseLogin:
+            if responseLogin[0]:
                 print(responseLogin)
             else:
-                print("error.")
+                print(responseLogin[1])
                 ContinueLoop=input("Press Enter to Continue.")
                 break
+            os.system('cls')
 
             print("""Bank Window
             1.Show Balance
@@ -159,8 +159,12 @@ while True:
 
             #Checks and calls selected functions along with proper arguments
             if ch == 1:
-                print(balance())
-
+                a = balance()
+                if a[0]:
+                    print(a[1])
+                else:
+                    print(a[1])
+                    
             elif ch == 2:
                 amt=float(input("Enter amount to be deposited:"))
                 print(deposit(amt))
@@ -195,7 +199,9 @@ while True:
                     print(i)    
    
             elif ch == 6:
-                print(logout())                       
+                print(logout())          
+
+            a = input('enter any key to continue')             
 
             
 
