@@ -72,7 +72,11 @@ def transact(reciever:int,amount:float):
     os.system('cls')
     #Sends Transact request with Reciever's Acc_ID and amount to be transferred
     server.send(pickle.dumps(("transact",(reciever,amount))))
-    return pickle.loads(server.recv(4096))  # returns whatever the server sends
+    response =  pickle.loads(server.recv(4096))  # returns whatever the server sends
+    if response[0]:
+        print('transaction succesful')
+    else:
+        print(response[1])
 
 def withdraw(amount:float):
     os.system('cls')
@@ -134,77 +138,72 @@ def logout():
 #Main Loop
 while True:        
     try:
-        while True:
-
-            server=connect(host,port)
-            responseLogin = login(server)
-            
-            if responseLogin[0]:
-                print(responseLogin)
-            else:
-                print(responseLogin[1])
-                ContinueLoop=input("Press Enter to Continue.")
-                break
-            os.system('cls')
-
-            print("""Bank Window
-            1.Show Balance
-            2.Deposit
-            3.Withdraw
-            4.Send money
-            5.Show Transaction History
-            6.Logout""")
-
-            ch=int(input("Select Action:"))
-
-            #Checks and calls selected functions along with proper arguments
-            if ch == 1:
-                a = balance()
-                if a[0]:
-                    print(a[1])
-                else:
-                    print(a[1])
-                    
-            elif ch == 2:
-                amt=float(input("Enter amount to be deposited:"))
-                print(deposit(amt))
-            
-            elif ch == 3:
-                print(withdraw())
-            
-            elif ch == 4:
-                #User inputs reciever as either acc id or username
-                #runs transact() with proper arguments depending on user input
-
-
-                value = print("Enter reciever's Account ID or username:")
+        server=connect(host,port)
+        responseLogin = login(server)
+        
+        if responseLogin[0]:
+            print(responseLogin)
+            while True:
                 
-                if isinstance(value,int):
-                    #Incase user enters acc_id
+                print("""Bank Window
+                1.Show Balance
+                2.Deposit
+                3.Withdraw
+                4.Send money
+                5.Show Transaction History
+                6.Logout""")
 
-                    surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
-                    if surity.lower in ["yes","y"]:
-                        amt = int(input(f"Enter amount to be transferred to {lookup(value)}:"))
-                        print(transact(value,amt))
+                ch=int(input("Select Action:"))
 
-                else:
-                    #Incase user enters username
-                    surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
-                    if surity.lower in ["yes","y"]:
-                        amt = int(input(f"Enter amount to be transferred to {value}:"))
-                        print(transact(lookup(value),amt))
+                #Checks and calls selected functions along with proper arguments
+                if ch == 1:
+                    balance()
+                        
+                elif ch == 2:
+                    deposit()
+                
+                elif ch == 3:
+                    withdraw()
+                
+                elif ch == 4:
+                    #User inputs reciever as either acc id or username
+                    #runs transact() with proper arguments depending on user input
 
-            elif ch == 5:
-                for i in history(100,0):
-                    print(i)    
-   
-            elif ch == 6:
-                print(logout())          
 
-            a = input('enter any key to continue')             
+                    value = print("Enter reciever's Account ID or username:")
+                    
+                    if isinstance(value,int):
+                        #Incase user enters acc_id
+
+                        surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
+                        if surity.lower in ["yes","y"]:
+                            amt = int(input(f"Enter amount to be transferred to {lookup(value)}:"))
+                            transact(value,amt)
+
+                    else:
+                        #Incase user enters username
+
+                        surity = print(f"Are you sure you want to transact to Account ID @{lookup(value)}(Y/N):")
+                        if surity.lower in ["yes","y"]:
+                            amt = int(input(f"Enter amount to be transferred to {value}:"))
+                            transact(lookup(value),amt)
+
+                elif ch == 5:
+                    history()
+    
+                elif ch == 6:
+                    print(logout())  
+                    break        
+
+                a = input('enter any key to continue')             
+
+        else:
+            print(responseLogin[1])
+            ContinueLoop=input("Press Enter to Continue.")
+            break
+        os.system('cls')
 
             
-
     #If any error occurs, print Error and continue the loop
     except Exception as E:
         print(E)
