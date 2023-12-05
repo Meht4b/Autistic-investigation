@@ -205,9 +205,9 @@ while True:
                     if isinstance(value,int):
                         #Incase user enters acc_id
 
-                        surity = input(f"Are you sure you want to transact to username @{lookup(value)}(Y/N):")
+                        surity = input(f"Are you sure you want to transact to username @{lookup(int(value))}(Y/N):")
                         if surity.lower in ["yes","y"]:
-                            amt = int(input(f"Enter amount to be transferred to {lookup(value)}:"))
+                            amt = int(input(f"Enter amount to be transferred to {lookup(int(value))}:"))
                             transact(value,amt)
 
                     else:
