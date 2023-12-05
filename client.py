@@ -144,6 +144,7 @@ def history(): #inorder to make it in pages just give offsett as 0 and limit as 
         for row in response_History[2-1]:
             for field in row:
                 print(field,end="\t")
+            print('')
 
 def lookup(value:int or str):
     #returns corresponding name/acc_id of input value
