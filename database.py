@@ -105,7 +105,7 @@ class db:
                 return (False,'insufficient balance')
             self.cursor.execute(f'update accounts set balance = balance + {amount} where acc_id = {to_id}')           
             self.cursor.execute(f'update accounts set balance = balance - {amount} where acc_id = {from_id}')
-            self.cursor.execute(f'insert into history (date,from_acc,to_acc,amount) values (curdate(),{from_id},{to_id},{amount})')
+            self.cursor.execute(f'insert into history (date,from_acc,to_acc,amount) values (now(),{from_id},{to_id},{amount})')
             self.connection.commit()
             return (True,)
         except Exception as e:
