@@ -87,8 +87,8 @@ def transact(reciever:int,amount:float):
         print(response[1])
 
 def withdraw():
-    amount = integerize("Enter amount to be withdrawn")
     os.system('cls')
+    amount = integerize("Enter amount to be withdrawn")
     #sends withdraw request with amount to be withdrawn
     server.send(pickle.dumps(("withdraw",amount)))
     response_withdraw = pickle.loads(server.recv(4096))
@@ -98,23 +98,34 @@ def withdraw():
         print(response_withdraw[1])
 
 def deposit():
-    amount=integerize("Enter amount to be deposited")
     os.system('cls')
+
+    amount=integerize("Enter amount to be deposited")
     #sends deposit request with amount to be deposited
     server.send(pickle.dumps(("deposit",amount)))
     deposit_Response = pickle.loads(server.recv(4096)) 
+    if deposit_Response[0]:
+        print(f"Deposited ${amount}")
+    else:
+        print(deposit_Response[1])
 
 def loan():
     os.system('cls')
+    amount=integerize("Enter loan amount")
     #sends loan request with amount of loan
     server.send(pickle.dumps(("loan",amount)))
-    return pickle.loads(server.recv(4096))  # returns whatever the server sends
+    response_Loan = pickle.loads(server.recv(4096))
+    if response_Loan[0]:
+        print("u have crippling debt L")
+    else:
+        print(response_Loan[1])
 
 def balance():
     os.system('cls')
     #sends balance request
     server.send(pickle.dumps(("balance",)))
-    return pickle.loads(server.recv(4096))  # returns whatever the server sends
+    response_Balance = pickle.loads(server.recv(4096))
+    print(response_Balance[1])
 
 def history(limit,offset): #inorder to make it in pages just give offsett as 0 and limit as 100 for now 
     os.system('cls')
@@ -122,8 +133,8 @@ def history(limit,offset): #inorder to make it in pages just give offsett as 0 a
     offset,limit=0,100 # for now
     server.send(pickle.dumps(('history',(offset,limit))))
     response_History = pickle.loads(server.recv(8192))  # returns whatever the server sends
-    if response_History[1]:
-        for row in response_History[2]:
+    if response_History[1-1]:
+        for row in response_History[2-1]:
             for field in row:
                 print(field,end="\t")
 
