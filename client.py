@@ -118,14 +118,48 @@ def deposit():
 
 def loan():
     os.system('cls')
-    amount=integerize("Enter loan amount")
-    #sends loan request with amount of loan
-    server.send(pickle.dumps(("loan",amount)))
-    response_Loan = pickle.loads(server.recv(4096))
-    if response_Loan[0]:
-        print("u have crippling debt L")
-    else:
-        print(response_Loan[1])
+    while True:
+        os.system('cls')
+        try:
+            n = input('1.show current loans \n2.take new loan \n3.pay\n4.return')
+            if n == '1':
+                server.send(pickle.dumps(('show_loan',)))
+                response = pickle.loads(server.recv(1000))
+                if response[0]:
+                    print('loan id\tamount\tpaid\tleft')
+                    for i in response[1]:
+                        for j in i:
+                            print(j,'\t',end='')
+                        print('')
+
+            elif n == '2':
+                amount = integerize('enter amount')
+                server.send(pickle.dumps(('loan',amount)))
+                response = pickle.loads(server.recv(1000))
+                if response[0]:
+                    print('loan applied succesfuly')
+                else:
+                    print(response[1])
+
+            elif n == '3':
+                l_id = integerize('enter loan id')
+                amount = integerize('enter amount to be paid')
+                server.send(pickle.dumps(('loan_acc',l_id)))
+                response = pickle.loads(server.recv(100))
+                if response[0]:
+                    l_acc = response[1]
+                    transact(l_acc,amount)
+                else:
+                    print('invalid loan id')
+           
+            elif n =='4':
+                return None
+                
+        
+        except Exception as e:
+            print(e)
+            
+        n = input('enter any key to continue')
 
 def balance():
     os.system('cls')
@@ -141,9 +175,12 @@ def history(): #inorder to make it in pages just give offsett as 0 and limit as 
     server.send(pickle.dumps(('history',(offset,limit))))
     response_History = pickle.loads(server.recv(8192))  # returns whatever the server sends
     if response_History[1-1]:
+        #print('transaction id\tdate\tfrom acc\tname\t\tto acc\tname\t\tamount')
         for row in response_History[2-1]:
-            for field in row:
-                print(field,end="\t")
+            
+            for i in range(len(row)):
+                print(row[i],end="\t")
+
             print('')
 
 def lookup(value:int or str):
@@ -189,7 +226,8 @@ while True:
                 3.Withdraw
                 4.Send money
                 5.Show Transaction History
-                6.Logout""")
+                6.loan
+                7.Logout""")
 
                 ch=int(input("Select Action:"))
 
@@ -230,6 +268,9 @@ while True:
                     history()
     
                 elif ch == 6:
+                    loan()
+
+                elif ch == 7:
                     print(logout())  
                     break        
 

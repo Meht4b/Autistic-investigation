@@ -125,7 +125,7 @@ class db:
 
     def history(self,acc_id,offset,lim): #returns (True,list[list[]]) where each list represents transaction 
         try:
-            self.cursor.execute(f'select transaction_id,date,from_acc,a.name,to_acc,b.name from history join personal_details as a on from_acc = a.acc_id and (from_acc = {acc_id} or to_acc = {acc_id}) join personal_details as b on to_acc = b.acc_id limit {lim} offset {offset}')#not sure if works
+            self.cursor.execute(f'select transaction_id,date,from_acc,a.name,to_acc,b.name,amount from history join personal_details as a on from_acc = a.acc_id and (from_acc = {acc_id} or to_acc = {acc_id}) join personal_details as b on to_acc = b.acc_id limit {lim} offset {offset}')#not sure if works
             return (True,self.cursor.fetchall())
         
         except Exception as e:
@@ -152,5 +152,19 @@ class db:
             return (True,self.cursor.fetchall()[0][0])
         except Exception as e:
             return (False, e)
+        
+    def current_loans(self,acc_id):
+        try:
+            self.cursor.execute(f'select L_id,amount,balance,amount-balance from loan join accounts where bank_account = accounts.acc_id')
+            return (True,self.cursor.fetchall())
+        except Exception as e:
+            return (False,e)
 
+    def loan_bank_acc(self,l_id):
+        try:
+            self.cursor.execute(f'select bank_account from loan where L_id = {l_id}')
+            return (True,self.cursor.fetchall()[0][0])
+        except Exception as e:
+            return (False,e)
 
+#d = db('localhost','root','password','test')

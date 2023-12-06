@@ -91,10 +91,16 @@ def handleClient(conn,addr):
                 conn.send(pickle.dumps(database.acc_id(req[1])))
             
             elif req[0]=='loan':
-                conn.send(pickle.dumps(database.loan(database,acc_id,req[1])))
+                conn.send(pickle.dumps(database.loan(acc_id,req[1])))
 
             elif req[0]=='disconnect':
                 disconnect(conn,"Connection Terminated")
+            
+            elif req[0]=='show_loan':
+                conn.send(pickle.dumps(database.current_loans(acc_id)))
+            
+            elif req[0] == 'loan_acc':
+                conn.send(pickle.dumps(database.loan_bank_acc(req[1])))
             
             else:
                 conn.send(pickle.dumps((False,'bad request')))
