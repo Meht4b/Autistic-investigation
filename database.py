@@ -155,7 +155,7 @@ class db:
         
     def current_loans(self,acc_id):
         try:
-            self.cursor.execute(f'select L_id,amount,balance,amount-balance from loan join accounts where bank_account = accounts.acc_id')
+            self.cursor.execute(f'select L_id,amount,balance,amount-balance from loan join accounts where bank_account = accounts.acc_id and loan.acc_id = {acc_id}')
             return (True,self.cursor.fetchall())
         except Exception as e:
             return (False,e)
@@ -167,4 +167,5 @@ class db:
         except Exception as e:
             return (False,e)
 
-#d = db('localhost','root','password','test')
+d = db('localhost','root','password','tt')
+print(d.current_loans(3))
