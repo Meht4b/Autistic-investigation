@@ -101,6 +101,7 @@ class db:
         
     def transact(self,from_id,to_id,amount):
         try:
+            print(self.balance(from_id)[1])
             if amount>self.balance(from_id)[1]:
                 return (False,'insufficient balance')
             self.cursor.execute(f'update accounts set balance = balance + {amount} where acc_id = {to_id}')           
@@ -167,5 +168,5 @@ class db:
         except Exception as e:
             return (False,e)
 
-d = db('localhost','root','password','tt')
-print(d.current_loans(3))
+#d = db('localhost','root','password','tt')
+#print(d.balance(2))

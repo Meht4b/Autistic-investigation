@@ -2,7 +2,7 @@ import database as data_base
 import socket 
 import pickle
 import threading 
-
+import os
 
 #initialise server 
 
@@ -12,6 +12,9 @@ port = 8080
 server = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 server.bind((host,port))
 
+os.system('cls')
+d = input('enter database name:')
+
 #disconnect function:
 def disconnect(conn,message):
     conn.send(pickle.dumps(("Disconnect",message)))
@@ -19,7 +22,7 @@ def disconnect(conn,message):
     return True
 
 
-database = data_base.db('localhost','root','password','test3')
+database = data_base.db('localhost','root','password',d)
 server.listen()
 #(self,host, user, password, database_name, )
 
@@ -34,9 +37,7 @@ def handleClient(conn,addr):
         loginSignup = pickle.loads(conn.recv(100))
         print(loginSignup)
 
-        if loginSignup == 'L':
-            print("L recieved")
-            #checks username and password;closes if they do not match
+        if loginSignup == 'L':            #checks username and password;closes if they do not match
             username,password = pickle.loads(conn.recv(100))
             response = database.user_check(username,password)
 
@@ -51,7 +52,6 @@ def handleClient(conn,addr):
                 return None
             
         if loginSignup == 'S':
-            print("S recieved")
             #sign up
             signupdetail = pickle.loads(conn.recv(100))
             conn.send(pickle.dumps(database.sign_up(signupdetail)))
