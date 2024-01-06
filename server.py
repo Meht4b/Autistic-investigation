@@ -14,6 +14,7 @@ server.bind((host,port))
 
 os.system('cls')
 d = input('enter database name:')
+p = input('enter password')
 
 #disconnect function:
 def disconnect(conn,message):
@@ -22,7 +23,7 @@ def disconnect(conn,message):
     return True
 
 
-database = data_base.db('localhost','root','password',d)
+database = data_base.db('localhost','root',p,d)
 server.listen()
 #(self,host, user, password, database_name, )
 

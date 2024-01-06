@@ -168,5 +168,3 @@ class db:
         except Exception as e:
             return (False,e)
 
-#d = db('localhost','root','password','tt')
-#print(d.balance(2))
